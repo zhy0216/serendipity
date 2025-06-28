@@ -1,11 +1,49 @@
+import { useState, useEffect } from 'react';
 import NavCard from './components/NavCard';
 import SearchResultItem from './components/SearchResultItem';
-import { MindMap } from './components/MindMap';
 import CodePreview from './components/CodePreview';
+import { MindMapData } from '@serendipity/types';
+import MindMap from './components/MindMap';
 
 function App() {
+  const [mindMapData, setMindMapData] = useState<MindMapData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchMindMapData = async () => {
+      try {
+        const response = await fetch('/1.json');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setMindMapData(data);
+      } catch (err) {
+        console.error('Error loading mind map data:', err);
+        setError('Failed to load mind map data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMindMapData();
+  }, []);
+
   return (
     <div className="flex h-screen bg-gray-50">
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl">加载思维导图数据中...</div>
+        </div>
+      )}
+      {error && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded">
+            {error}
+          </div>
+        </div>
+      )}
       {/* Left Navigation Bar - Card Display */}
       <nav className="w-64 bg-white shadow-lg border-r border-gray-200 overflow-y-auto">
         <div className="p-4 border-b border-gray-200">
@@ -23,37 +61,12 @@ function App() {
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto">
         <header className="bg-white shadow-sm border-b border-gray-200 px-8 py-6">
-          <h1 className="text-3xl font-bold text-gray-900">Mind Map</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            {mindMapData ? mindMapData.centerNode : 'Mind Map'}
+          </h1>
         </header>
         <div className="p-8">
-          <section className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-            <MindMap data={{
-              centerNode: 'Serendipity Project',
-              connections: [
-                {
-                  nodeName: 'Frontend',
-                  connection: 'Built with',
-                  insight: 'React-based UI with TypeScript',
-                  explorationMethod: 'Technical Analysis',
-                  references: [{ name: 'React', url: 'https://reactjs.org/' }]
-                },
-                {
-                  nodeName: 'Backend',
-                  connection: 'Powered by',
-                  insight: 'Node.js with Express',
-                  explorationMethod: 'Technical Analysis',
-                  references: [{ name: 'Express', url: 'https://expressjs.com/' }]
-                },
-                {
-                  nodeName: 'Database',
-                  connection: 'Stores data in',
-                  insight: 'PostgreSQL for structured data',
-                  explorationMethod: 'Technical Analysis',
-                  references: [{ name: 'PostgreSQL', url: 'https://www.postgresql.org/' }]
-                }
-              ]
-            }} />
-          </section>
+          {mindMapData && <MindMap data={mindMapData} />}
         </div>
       </main>
 

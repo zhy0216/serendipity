@@ -1,0 +1,150 @@
+{
+    "centerNode": "计算机算法",
+    "connections": [
+      {
+        "nodeName": "生物算法原型",
+        "connection": "自然界中的优化过程（如蚁群觅食、免疫系统响应、神经网络学习）实际上是数百万年进化出的算法，为现代计算提供了蓝图",
+        "insight": "算法不是人类发明的，而是自然界固有的信息处理模式。我们只是在重新发现和编码化这些已经存在的解决方案。",
+        "explorationMethod": "系统边界消解 - 移除计算机科学与生物学之间的界限",
+        "references": [
+          {
+            "name": "约束驱动创造性研究",
+            "url": "https://hbr.org/2013/01/how-intelligent-constraints-dr"
+          }
+        ]
+      },
+      {
+        "nodeName": "分形计算宇宙",
+        "connection": "从量子计算的概率叠加到宇宙演化的信息论模型，算法模式在所有尺度上重复出现",
+        "insight": "宇宙本身可能是一个巨大的算法执行过程，我们编写的每个算法都是在模拟宇宙的某个层面的运作方式。",
+        "explorationMethod": "多尺度共振 - 寻找在不同尺度上重复的算法模式",
+        "references": [
+          {
+            "name": "设计约束管理研究",
+            "url": "https://www.sciencedirect.com/science/article/pii/S1755581718300762"
+          }
+        ]
+      },
+      {
+        "nodeName": "错误即功能",
+        "connection": "软件bug、算法故障和计算错误经常意外地创造出新的功能和创新方向",
+        "insight": "完美的算法可能是创新的敌人。错误和不完美引入了意外性和新可能性，这正是创造力的源泉。",
+        "explorationMethod": "错误转化路径 - 将算法缺陷转化为特性",
+        "references": [
+          {
+            "name": "跨学科创新约束模型",
+            "url": "https://onlinelibrary.wiley.com/doi/10.1111/jpim.12093"
+          }
+        ]
+      },
+      {
+        "nodeName": "涌现智能悖论",
+        "connection": "简单的if-then规则集合在大规模交互时产生了人们无法预测的复杂智能行为",
+        "insight": "真正的人工智能可能不来自复杂算法，而来自大量简单算法的交互涌现。我们一直在错误的层面寻找智能。",
+        "explorationMethod": "涌现路径 - 探索简单规则创造复杂行为的临界点",
+        "references": [
+          {
+            "name": "约束下的创造性研究",
+            "url": "https://backend.orbit.dtu.dk/ws/portalfiles/portal/114475232/The_ambiguous_role_of_constraints_in_creativity.pdf"
+          }
+        ]
+      },
+      {
+        "nodeName": "自我修改之谜",
+        "connection": "能够修改自身代码的算法创造了一个哲学悖论：创造者和被创造者之间的界限消失",
+        "insight": "自修改算法揭示了一个深层真理：所有学习系统，包括人类意识，都是自我修改的算法。程序员和程序之间没有本质区别。",
+        "explorationMethod": "递归循环发现 - 探索自引用系统和反馈循环",
+        "references": [
+          {
+            "name": "强约束下的创造性",
+            "url": "https://www.cambridge.org/core/journals/european-review/article/abs/creativity-under-strong-constraints-the-hidden-influence-of-design-models/B8491A1EF19847DA5B6C77BF7C09500A"
+          }
+        ]
+      },
+      {
+        "nodeName": "反向计算哲学",
+        "connection": "通过研究算法无法解决的问题（如停机问题），我们发现了计算的根本限制，这反而指向了新的可能性",
+        "insight": "算法的边界不是缺陷，而是通向非计算型解决方案的指南。不可计算性可能是意识和创造力的关键特征。",
+        "explorationMethod": "逆向逻辑路径 - 颠倒关于算法万能性的基本假设",
+        "references": [
+          {
+            "name": "约束驱动创造性研究",
+            "url": "https://hbr.org/2013/01/how-intelligent-constraints-dr"
+          }
+        ]
+      },
+      {
+        "nodeName": "古代算法智慧",
+        "connection": "古代文明的仪式、占卜和哲学体系包含了复杂的算法思维，为现代计算提供了被遗忘的洞察",
+        "insight": "现代算法设计可能过于专注于效率而忽视了智慧。古代算法注重平衡、直觉和整体性，这些特质正是当前AI发展所缺乏的。",
+        "explorationMethod": "时间位移路径 - 寻找古代解决方案对现代计算问题的启示",
+        "references": [
+          {
+            "name": "设计约束管理研究",
+            "url": "https://www.sciencedirect.com/science/article/pii/S1755581718300762"
+          }
+        ]
+      },
+      {
+        "nodeName": "算法作为通用语言",
+        "connection": "算法成为了连接数学、艺术、音乐、建筑、经济学、心理学等所有领域的通用表达语言",
+        "insight": "算法可能是人类知识的元语言，所有学科最终都可以用算法来描述和连接。这预示着知识统一理论的可能性。",
+        "explorationMethod": "跨域授粉催化 - 算法作为不同领域间的桥梁",
+        "references": [
+          {
+            "name": "跨学科创新约束模型",
+            "url": "https://onlinelibrary.wiley.com/doi/10.1111/jpim.12093"
+          }
+        ]
+      },
+      {
+        "nodeName": "无限计算幻想",
+        "connection": "想象移除所有计算资源限制后，算法将能够模拟完整的现实，创造真正的虚拟宇宙",
+        "insight": "无限计算力不会带来无限可能，而会揭示现实本身的算法结构。我们可能发现物理定律就是宇宙的程序代码。",
+        "explorationMethod": "约束消除路径 - 移除计算限制探索隐藏可能性",
+        "references": [
+          {
+            "name": "约束下的创造性研究",
+            "url": "https://backend.orbit.dtu.dk/ws/portalfiles/portal/114475232/The_ambiguous_role_of_constraints_in_creativity.pdf"
+          }
+        ]
+      },
+      {
+        "nodeName": "算法留白艺术",
+        "connection": "算法中未被编程的部分、沉默的时间间隔和刻意的不完整性，往往比执行的代码更重要",
+        "insight": "最优雅的算法不在于它做了什么，而在于它选择不做什么。算法设计的艺术在于知道何时停止，为意外和创造力留下空间。",
+        "explorationMethod": "负空间探索 - 专注于算法中缺失和被忽视的部分",
+        "references": [
+          {
+            "name": "强约束下的创造性",
+            "url": "https://www.cambridge.org/core/journals/european-review/article/abs/creativity-under-strong-constraints-the-hidden-influence-of-design-models/B8491A1EF19847DA5B6C77BF7C09500A"
+          }
+        ]
+      },
+      {
+        "nodeName": "计算范式战争",
+        "connection": "串行计算、并行计算、量子计算、神经形态计算等不同范式的冲突正在重新定义算法的本质",
+        "insight": "我们正处于计算范式的大转换期。不同计算模式的碰撞将产生全新的算法类型，这些算法将超越我们当前的理解框架。",
+        "explorationMethod": "范式碰撞 - 探索不兼容计算系统相互作用时的现象",
+        "references": [
+          {
+            "name": "约束驱动创造性研究",
+            "url": "https://hbr.org/2013/01/how-intelligent-constraints-dr"
+          }
+        ]
+      },
+      {
+        "nodeName": "随机性的创造力",
+        "connection": "在算法中引入随机元素不是缺陷，而是模拟真实世界不确定性和发现意外解决方案的关键机制",
+        "insight": "纯确定性算法可能是进化的死胡同。随机性和噪声是创新的必要成分，它们让算法能够探索未知的解决方案空间。",
+        "explorationMethod": "通配符突变 - 观察随机元素在算法系统中的存活和进化",
+        "references": [
+          {
+            "name": "设计约束管理研究",
+            "url": "https://www.sciencedirect.com/science/article/pii/S1755581718300762"
+          }
+        ]
+      }
+    ]
+  }
+  

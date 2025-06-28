@@ -1,3 +1,1 @@
-export * from './mindMapNode';
-
-export * from './mindMapNode';
+export type * from './mindMapNode.ts';

@@ -3,7 +3,7 @@ import NavCard from './components/NavCard';
 import SearchResultItem from './components/SearchResultItem';
 import CodePreview from './components/CodePreview';
 import { MindMapData } from '@serendipity/types';
-import MindMap from './components/MindMap';
+import { MindCard } from './components/MindCard';
 
 function App() {
   const [mindMapData, setMindMapData] = useState<MindMapData | null>(null);
@@ -62,11 +62,23 @@ function App() {
       <main className="flex-1 overflow-y-auto">
         <header className="bg-white shadow-sm border-b border-gray-200 px-8 py-6">
           <h1 className="text-3xl font-bold text-gray-900">
-            {mindMapData ? mindMapData.centerNode : 'Mind Map'}
+            思维连接卡片
           </h1>
+          <p className="text-gray-600 mt-2">探索思维之间的深层连接</p>
         </header>
         <div className="p-8">
-          {mindMapData && <MindMap data={mindMapData} />}
+          {mindMapData && mindMapData.connections && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              {mindMapData.connections.map((connection, index) => (
+                <MindCard key={index} connection={connection} />
+              ))}
+            </div>
+          )}
+          {!mindMapData && !loading && !error && (
+            <div className="text-center py-12">
+              <div className="text-gray-500 text-lg">暂无思维连接数据</div>
+            </div>
+          )}
         </div>
       </main>
 

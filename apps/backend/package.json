@@ -17,7 +17,7 @@
             "cjs"
           ],
           "bundle": false,
-          "main": "apps/backend/src/main.ts",
+          "main": "apps/backend/src/index.ts",
           "tsConfig": "apps/backend/tsconfig.app.json",
           "assets": [
             "apps/backend/src/assets"

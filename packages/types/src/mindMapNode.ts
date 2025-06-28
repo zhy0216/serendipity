@@ -15,3 +15,5 @@ export interface MindMapData {
   centerNode: string;
   connections: Connection[];
 }
+
+export type { MindMapData as default }

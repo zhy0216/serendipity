@@ -10,7 +10,8 @@
     "kysely": "^0.28.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-router-dom": "6.29.0"
+    "react-router-dom": "6.29.0",
+    "reactflow": "^11.11.4"
   },
   "devDependencies": {
     "@nx/esbuild": "21.2.1",

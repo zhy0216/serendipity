@@ -1,9 +1,9 @@
-
 import NavCard from './components/NavCard';
 import SearchResultItem from './components/SearchResultItem';
+import { MindMap } from './components/MindMap';
 import CodePreview from './components/CodePreview';
 
-const App = () => {
+function App() {
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Left Navigation Bar - Card Display */}
@@ -23,33 +23,36 @@ const App = () => {
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto">
         <header className="bg-white shadow-sm border-b border-gray-200 px-8 py-6">
-          <h1 className="text-3xl font-bold text-gray-900">主要内容区域</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Mind Map</h1>
         </header>
         <div className="p-8">
-          <section className="mb-8 bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">欢迎使用 Serendipity</h3>
-            <p className="text-gray-600 leading-relaxed">这是主要的内容展示区域。您可以在这里添加各种内容，如文章、项目展示、数据图表等。</p>
-          </section>
           <section className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">功能特性</h3>
-            <ul className="space-y-2 text-gray-600">
-              <li className="flex items-center">
-                <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-                响应式三栏布局
-              </li>
-              <li className="flex items-center">
-                <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-                现代化的用户界面
-              </li>
-              <li className="flex items-center">
-                <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-                灵活的内容管理
-              </li>
-              <li className="flex items-center">
-                <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-                高性能的前端架构
-              </li>
-            </ul>
+            <MindMap data={{
+              centerNode: 'Serendipity Project',
+              connections: [
+                {
+                  nodeName: 'Frontend',
+                  connection: 'Built with',
+                  insight: 'React-based UI with TypeScript',
+                  explorationMethod: 'Technical Analysis',
+                  references: [{ name: 'React', url: 'https://reactjs.org/' }]
+                },
+                {
+                  nodeName: 'Backend',
+                  connection: 'Powered by',
+                  insight: 'Node.js with Express',
+                  explorationMethod: 'Technical Analysis',
+                  references: [{ name: 'Express', url: 'https://expressjs.com/' }]
+                },
+                {
+                  nodeName: 'Database',
+                  connection: 'Stores data in',
+                  insight: 'PostgreSQL for structured data',
+                  explorationMethod: 'Technical Analysis',
+                  references: [{ name: 'PostgreSQL', url: 'https://www.postgresql.org/' }]
+                }
+              ]
+            }} />
           </section>
         </div>
       </main>

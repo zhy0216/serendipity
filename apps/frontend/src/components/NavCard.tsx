@@ -1,9 +1,10 @@
 interface NavCardProps {
   keyword: string;
   isSelect: boolean;
+  onClick?: () => void;
 }
 
-const NavCard = ({ keyword, isSelect }: NavCardProps) => {
+const NavCard = ({ keyword, isSelect, onClick }: NavCardProps) => {
   // Use blue style when selected, gray style when not selected
   const selectedStyle = {
     gradient: 'from-blue-50 to-blue-100',
@@ -31,6 +32,7 @@ const NavCard = ({ keyword, isSelect }: NavCardProps) => {
         ${isSelect ? 'ring-2 ring-blue-500 shadow-lg' : ''}
         ${style.hover}
       `}
+      onClick={onClick}
     >
       <h3 className={`font-semibold ${style.title} text-center`}>
         {keyword}

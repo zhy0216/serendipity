@@ -1,39 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import NavCard from '../components/NavCard';
 import SearchResultItem from '../components/SearchResultItem';
 import CodePreview from '../components/CodePreview';
-import { MindMapData } from '@serendipity/types';
 import { MindCard } from '../components/MindCard';
+import { useAppStore } from '../store/useAppStore';
 
 function AppPage() {
-  const [mindMapData, setMindMapData] = useState<MindMapData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { 
+    mindMapData, 
+    isLoading, 
+    error, 
+    searchQuery,
+    selectedKeyword,
+    loadMindMapData,
+    setSelectedKeyword 
+  } = useAppStore();
 
   useEffect(() => {
-    const fetchMindMapData = async () => {
-      try {
-        const response = await fetch('/1.json');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setMindMapData(data);
-      } catch (err) {
-        console.error('Error loading mind map data:', err);
-        setError('Failed to load mind map data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMindMapData();
-  }, []);
+    loadMindMapData();
+  }, [loadMindMapData]);
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {loading && (
+      {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-xl">Loading mind map data...</div>
         </div>
@@ -66,6 +56,8 @@ function AppPage() {
             <input
               type="text"
               placeholder="Search keywords..."
+              value={searchQuery}
+              // onChange={(e) => searchQuery(e.target.value)}
               className="w-full px-4 py-2 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 hover:bg-white transition-colors"
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -74,11 +66,31 @@ function AppPage() {
               </svg>
             </div>
           </div>
-          <NavCard keyword="serendipity" isSelect={true} />
-          <NavCard keyword="ai" isSelect={false} />
-          <NavCard keyword="data" isSelect={false} />
-          <NavCard keyword="api" isSelect={false} />
-          <NavCard keyword="test" isSelect={false} />
+          <NavCard 
+            keyword="serendipity" 
+            isSelect={selectedKeyword === 'serendipity'}
+            onClick={() => setSelectedKeyword('serendipity')}
+          />
+          <NavCard 
+            keyword="ai" 
+            isSelect={selectedKeyword === 'ai'}
+            onClick={() => setSelectedKeyword('ai')}
+          />
+          <NavCard 
+            keyword="data" 
+            isSelect={selectedKeyword === 'data'}
+            onClick={() => setSelectedKeyword('data')}
+          />
+          <NavCard 
+            keyword="api" 
+            isSelect={selectedKeyword === 'api'}
+            onClick={() => setSelectedKeyword('api')}
+          />
+          <NavCard 
+            keyword="test" 
+            isSelect={selectedKeyword === 'test'}
+            onClick={() => setSelectedKeyword('test')}
+          />
         </div>
       </nav>
 
@@ -98,7 +110,7 @@ function AppPage() {
               ))}
             </div>
           )}
-          {!mindMapData && !loading && !error && (
+          {!mindMapData && !isLoading && !error && (
             <div className="text-center py-12">
               <div className="text-gray-500 text-lg">No mind connection data available</div>
             </div>

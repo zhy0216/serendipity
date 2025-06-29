@@ -47,9 +47,22 @@ function App() {
       {/* Left Navigation Bar - Card Display */}
       <nav className="w-64 bg-white shadow-lg border-r border-gray-200 overflow-y-auto">
         <div className="p-4 border-b border-gray-200">
-          <h2 className="text-lg font-bold text-gray-800">项目卡片</h2>
+          <h2 className="text-lg font-bold text-gray-800">Serendipity</h2>
         </div>
         <div className="p-4 space-y-3">
+          {/* Search Box */}
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search keywords..."
+              className="w-full px-4 py-2 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 hover:bg-white transition-colors"
+            />
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+              <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
           <NavCard keyword="serendipity" isSelect={true} />
           <NavCard keyword="ai" isSelect={false} />
           <NavCard keyword="data" isSelect={false} />
@@ -67,10 +80,10 @@ function App() {
           <p className="text-gray-600 mt-2">探索思维之间的深层连接</p>
         </header>
         <div className="p-8">
-          {mindMapData && mindMapData.connections && (
+          {mindMapData && mindMapData.nodes && (
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-              {mindMapData.connections.map((connection, index) => (
-                <MindCard key={index} connection={connection} />
+              {mindMapData.nodes.map((node, index) => (
+                <MindCard key={index} node={node} />
               ))}
             </div>
           )}

@@ -3,7 +3,7 @@ export interface Reference {
   url: string;
 }
 
-export interface Connection {
+export interface MapNode {
   nodeName: string;
   connection: string;
   insight: string;
@@ -13,7 +13,7 @@ export interface Connection {
 
 export interface MindMapData {
   centerNode: string;
-  connections: Connection[];
+  nodes: MapNode[];
 }
 
 export type { MindMapData as default }

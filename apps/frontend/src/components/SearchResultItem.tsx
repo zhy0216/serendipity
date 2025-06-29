@@ -21,19 +21,6 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
   const [showPreview, setShowPreview] = useState(false);
   const itemRef = useRef<HTMLDivElement>(null);
 
-  const getTypeColor = (type: string) => {
-    const colors = {
-      '组件': 'text-blue-600 bg-blue-100',
-      '函数': 'text-green-600 bg-green-100', 
-      '类型': 'text-purple-600 bg-purple-100',
-      'CSS': 'text-orange-600 bg-orange-100',
-      '工具': 'text-red-600 bg-red-100',
-      '配置': 'text-gray-600 bg-gray-100',
-      'file': 'text-gray-600 bg-gray-100'
-    };
-    return colors[type as keyof typeof colors] || colors.file;
-  };
-
   return (
     <div 
       ref={itemRef}
@@ -48,7 +35,7 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
           <h3 className="text-lg text-blue-700 hover:text-blue-800 hover:underline leading-tight">
             {title}
           </h3>
-          <span className={`text-xs px-2 py-1 rounded-full ${getTypeColor(type)} ml-2 flex-shrink-0`}>
+          <span className={`text-xs px-2 py-1 rounded-full text-blue-600 bg-blue-100 ml-2 flex-shrink-0`}>
             {type}
           </span>
         </div>

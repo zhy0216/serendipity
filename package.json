@@ -2,7 +2,9 @@
   "name": "@serendipity/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "typecheck": "nx run-many -t typecheck -p frontend backend types"
+  },
   "private": true,
   "dependencies": {
     "@hono/node-server": "^1.14.4",

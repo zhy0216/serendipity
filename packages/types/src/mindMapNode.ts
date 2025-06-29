@@ -1,14 +1,9 @@
-export interface Reference {
-  name: string;
-  url: string;
-}
-
 export interface MapNode {
   nodeName: string;
   connection: string;
   insight: string;
-  explorationMethod: string;
-  references: Reference[];
+  explorationMethods: string[];
+  references: string[];
 }
 
 export interface MindMapData {

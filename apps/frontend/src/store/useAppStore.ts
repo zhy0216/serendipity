@@ -4,6 +4,7 @@ import { createMindMapStream } from '../utils/streamingJsonParser';
 
 
 interface AppState {
+  keywords: string[];
   // Mind map data
   mindMapData: MindMapData | null;
   streamingNodes: Map<number, { node: Partial<MapNode>; isComplete: boolean }>;
@@ -32,6 +33,7 @@ interface AppState {
 export const useAppStore = create<AppState>((set, get) => ({
   // Initial state
   mindMapData: null,
+  keywords: localStorage.getItem('keywords') ? JSON.parse(localStorage.getItem('keywords') as string) : [],
   streamingNodes: new Map(),
   isLoading: false,
   error: null,
@@ -93,15 +95,19 @@ export const useAppStore = create<AppState>((set, get) => ({
         centerNode: keyword,
         nodes
       };
+
+      const keywords = [...get().keywords];
+      keywords.push(keyword);
       
       // Cache the data in localStorage
       try {
         localStorage.setItem(cacheKey, JSON.stringify(mindMapData));
+        localStorage.setItem('keywords', JSON.stringify(keywords));
       } catch (storageError) {
         console.warn('Failed to cache data in localStorage:', storageError);
       }
       
-      set({ mindMapData, isLoading: false });
+      set({ keywords, mindMapData, isLoading: false });
     } catch (error) {
       console.error('Error loading mind map data:', error);
       set({ 

@@ -80,26 +80,31 @@ function AppPage() {
           </div>
           <NavCard 
             keyword="serendipity" 
+            isLoading={isLoading}
             isSelect={selectedKeyword === 'serendipity'}
             onClick={() => setSelectedKeyword('serendipity')}
           />
           <NavCard 
             keyword="ai" 
+            isLoading={isLoading}
             isSelect={selectedKeyword === 'ai'}
             onClick={() => setSelectedKeyword('ai')}
           />
           <NavCard 
             keyword="data" 
+            isLoading={isLoading}
             isSelect={selectedKeyword === 'data'}
             onClick={() => setSelectedKeyword('data')}
           />
           <NavCard 
             keyword="api" 
+            isLoading={isLoading}
             isSelect={selectedKeyword === 'api'}
             onClick={() => setSelectedKeyword('api')}
           />
           <NavCard 
             keyword="test" 
+            isLoading={isLoading}
             isSelect={selectedKeyword === 'test'}
             onClick={() => setSelectedKeyword('test')}
           />

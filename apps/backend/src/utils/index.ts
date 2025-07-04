@@ -23,7 +23,6 @@ export async function* getMindMap(keyword: string) {
 ## 输出结构
 生成以下格式的JSON结构：
 
-\`\`\`json
 {
   "centerNode": "{关键词}",
   "nodes": [
@@ -48,7 +47,7 @@ export async function* getMindMap(keyword: string) {
     }
   ]
 }
-\`\`\`
+
 
 **重要说明1：nodeName应该使用纯粹的核心名词，不含形容词修饰，以便用户可以直接搜索。例如：**
 - ✅ 正确："量子力学"、"复杂系统"、"神经网络"
@@ -176,9 +175,9 @@ export async function* getMindMap(keyword: string) {
     });
 
     for await (const chunk of stream) {
-        const content = chunk.choices[0]?.delta?.content || '';
-        if (content) {
-            yield content;
-        }
+      const content = chunk.choices[0]?.delta?.content || '';
+      if (content) {
+          yield content;
+      }
     }
 }

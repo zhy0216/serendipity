@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import NavCard from '../components/NavCard';
 import SearchResultItem from '../components/SearchResultItem';
@@ -7,6 +7,7 @@ import { MindCard } from '../components/MindCard';
 import { useAppStore } from '../store/useAppStore';
 
 function AppPage() {
+  const [searchParams] = useSearchParams();
   const { 
     mindMapData, 
     streamingNodes,
@@ -18,6 +19,14 @@ function AppPage() {
     loadMindMapDataStreaming
   } = useAppStore();
 
+  // Handle URL query parameter on initial load
+  useEffect(() => {
+    const queryParam = searchParams.get('q');
+    if (queryParam && !selectedKeyword) {
+      setSelectedKeyword(queryParam);
+    }
+  }, [searchParams, selectedKeyword, setSelectedKeyword]);
+
   // Load mind map data when selectedKeyword changes
   useEffect(() => {
     if (selectedKeyword) {
@@ -28,11 +37,11 @@ function AppPage() {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {isLoading && (
+      {/* {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-xl">Loading mind map data...</div>
         </div>
-      )}
+      )} */}
       {error && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded">

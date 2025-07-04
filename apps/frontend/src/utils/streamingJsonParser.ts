@@ -19,7 +19,9 @@ export async function* createMindMapStream(
   
   // Set up parser callbacks
   parser.onValue = ({ value }) => {
-    nodeQueue.push(value as unknown as MapNode);
+    if(isCompleteMapNode(value)) {
+      nodeQueue.push(value as unknown as MapNode);
+    }
     // Notify waiting generator that new data is available
     if (resolveNext) {
       resolveNext();

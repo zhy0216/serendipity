@@ -59,6 +59,27 @@ export const useAppStore = create<AppState>((set, get) => ({
       set({ isLoading: true, error: null });
       get().clearStreamingNodes();
       
+      // Check localStorage first
+      const cacheKey = `mindmap_${keyword.toLowerCase().replace(/\s+/g, '_')}`;
+      const cachedData = localStorage.getItem(cacheKey);
+      
+      if (cachedData) {
+        try {
+          const parsedData: MindMapData = JSON.parse(cachedData);
+          // Load cached data immediately
+          parsedData.nodes.forEach((node, index) => {
+            get().addStreamingNode(index, node, true);
+          });
+          set({ mindMapData: parsedData, isLoading: false });
+          return;
+        } catch (parseError) {
+          console.warn('Failed to parse cached data, fetching from API:', parseError);
+          // Remove corrupted cache
+          localStorage.removeItem(cacheKey);
+        }
+      }
+      
+      // Fetch from API if no cache or cache is invalid
       let nodeIndex = 0;
       for await (const node of createMindMapStream(keyword)) {
         get().addStreamingNode(nodeIndex, node, true);
@@ -72,6 +93,13 @@ export const useAppStore = create<AppState>((set, get) => ({
         centerNode: keyword,
         nodes
       };
+      
+      // Cache the data in localStorage
+      try {
+        localStorage.setItem(cacheKey, JSON.stringify(mindMapData));
+      } catch (storageError) {
+        console.warn('Failed to cache data in localStorage:', storageError);
+      }
       
       set({ mindMapData, isLoading: false });
     } catch (error) {

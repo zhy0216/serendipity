@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import NavCard from '../components/NavCard';
 import SearchResultItem from '../components/SearchResultItem';
 import CodePreview from '../components/CodePreview';
@@ -9,17 +9,22 @@ import { useAppStore } from '../store/useAppStore';
 function AppPage() {
   const { 
     mindMapData, 
+    streamingNodes,
     isLoading, 
     error, 
     searchQuery,
     selectedKeyword,
-    loadMindMapData,
-    setSelectedKeyword 
+    setSelectedKeyword,
+    loadMindMapDataStreaming
   } = useAppStore();
 
+  // Load mind map data when selectedKeyword changes
   useEffect(() => {
-    loadMindMapData();
-  }, [loadMindMapData]);
+    if (selectedKeyword) {
+      loadMindMapDataStreaming(selectedKeyword);
+    }
+  }, [selectedKeyword, loadMindMapDataStreaming]);
+
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -103,14 +108,27 @@ function AppPage() {
           <p className="text-gray-600 mt-2">Explore deep connections between thoughts</p>
         </header>
         <div className="p-8">
-          {mindMapData && mindMapData.nodes && (
+          {/* Show streaming nodes first, then final data */}
+          {(streamingNodes.size > 0 || (mindMapData && mindMapData.nodes)) && (
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-              {mindMapData.nodes.map((node, index) => (
-                <MindCard key={index} node={node} />
+              {/* Streaming nodes */}
+              {Array.from(streamingNodes.entries()).map(([index, { node, isComplete }]) => (
+                node.nodeName ? (
+                  <MindCard 
+                    key={`streaming-${index}`} 
+                    node={node as any} 
+                    isLoading={!isComplete}
+                  />
+                ) : null
+              ))}
+              
+              {/* Final nodes (only show if streaming is complete) */}
+              {mindMapData && mindMapData.nodes && streamingNodes.size === 0 && mindMapData.nodes.map((node, index) => (
+                <MindCard key={`final-${index}`} node={node} />
               ))}
             </div>
           )}
-          {!mindMapData && !isLoading && !error && (
+          {!mindMapData && !isLoading && !error && streamingNodes.size === 0 && (
             <div className="text-center py-12">
               <div className="text-gray-500 text-lg">No mind connection data available</div>
             </div>

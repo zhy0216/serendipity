@@ -25,6 +25,11 @@ app.get('/api/mindMap', async (c) => {
                         event: 'chunk'
                     })
                 }
+
+                await stream.writeSSE({
+                    data: "done",
+                    event: 'complete'
+                })
             } catch (error) {
                 console.error('Error in streaming:', error)
                 await stream.writeSSE({

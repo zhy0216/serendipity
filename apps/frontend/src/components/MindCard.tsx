@@ -3,11 +3,18 @@ import { MapNode } from '@serendipity/types';
 
 interface MindCardProps {
   node: MapNode;
+  isLoading?: boolean;
 }
 
-export const MindCard: React.FC<MindCardProps> = ({ node }) => {
+export const MindCard: React.FC<MindCardProps> = ({ node, isLoading = false }) => {
   return (
-    <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-6 border border-gray-200 hover:border-gray-300 group ">
+    <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-6 border border-gray-200 hover:border-gray-300 group relative">
+      {/* Loading indicator */}
+      {isLoading && (
+        <div className="absolute top-4 right-4">
+          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+        </div>
+      )}
       {/* Node Name Header */}
       <div className="mb-4 cursor-pointer">
         <h3 className="text-xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-200">

@@ -8,6 +8,7 @@
   "private": true,
   "dependencies": {
     "@hono/node-server": "^1.14.4",
+    "@streamparser/json": "^0.0.22",
     "hono": "^4.8.3",
     "kysely": "^0.28.2",
     "openai": "^5.8.2",

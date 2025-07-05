@@ -28,14 +28,14 @@ class MockEventSource {
 
   removeEventListener(type: string, listener: (event: Event) => void) {
     if (this.listeners[type]) {
-      this.listeners[type] = this.listeners[type].filter(l => l !== listener);
+      this.listeners[type] = this.listeners[type].filter((l) => l !== listener);
     }
   }
 
   dispatchEvent(event: Event): boolean {
     const type = event.type;
     if (this.listeners[type]) {
-      this.listeners[type].forEach(listener => listener(event));
+      this.listeners[type].forEach((listener) => listener(event));
     }
     return true;
   }
@@ -70,7 +70,9 @@ const originalEventSource = global.EventSource;
 let mockEventSourceSpy: any;
 
 beforeEach(() => {
-  mockEventSourceSpy = vi.fn().mockImplementation((url: string) => new MockEventSource(url));
+  mockEventSourceSpy = vi
+    .fn()
+    .mockImplementation((url: string) => new MockEventSource(url));
   global.EventSource = mockEventSourceSpy;
 });
 
@@ -87,7 +89,7 @@ describe.skip('streamingJsonParser', () => {
         connection: 'Test connection',
         insight: 'Test insight',
         explorationMethods: ['method1', 'method2'],
-        references: ['ref1', 'ref2']
+        references: ['ref1', 'ref2'],
       };
 
       expect(isCompleteMapNode(completeNode)).toBe(true);
@@ -99,7 +101,7 @@ describe.skip('streamingJsonParser', () => {
         connection: 'Valid connection',
         insight: 'Valid insight',
         explorationMethods: [],
-        references: []
+        references: [],
       };
 
       expect(isCompleteMapNode(validNode)).toBe(true);
@@ -110,7 +112,7 @@ describe.skip('streamingJsonParser', () => {
     it('should create EventSource with correct URL', async () => {
       const keyword = 'test keyword';
       const generator = createMindMapStream(keyword);
-      
+
       const iterator = generator[Symbol.asyncIterator]();
       // Start the generator execution
       try {
@@ -118,7 +120,7 @@ describe.skip('streamingJsonParser', () => {
       } catch (error) {
         // Expected to fail since we're mocking EventSource
       }
-      
+
       expect(mockEventSourceSpy).toHaveBeenCalledWith(
         `/api/mindMap?keyword=${encodeURIComponent(keyword)}`
       );
@@ -127,7 +129,7 @@ describe.skip('streamingJsonParser', () => {
     it('should handle URL encoding properly', async () => {
       const keyword = 'test with spaces & symbols';
       const generator = createMindMapStream(keyword);
-      
+
       const iterator = generator[Symbol.asyncIterator]();
       // Start the generator execution
       try {
@@ -135,11 +137,10 @@ describe.skip('streamingJsonParser', () => {
       } catch (error) {
         // Expected to fail since we're mocking EventSource
       }
-      
+
       expect(mockEventSourceSpy).toHaveBeenCalledWith(
         `/api/mindMap?keyword=${encodeURIComponent(keyword)}`
       );
     });
-
   });
 });

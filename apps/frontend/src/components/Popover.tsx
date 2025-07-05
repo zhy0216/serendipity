@@ -8,13 +8,15 @@ interface PopoverProps {
   triggerRef?: React.RefObject<HTMLElement | null>;
 }
 
-const Popover: React.FC<PopoverProps> = ({ 
-  children, 
-  isVisible, 
+const Popover: React.FC<PopoverProps> = ({
+  children,
+  isVisible,
   position = 'left',
-  triggerRef 
+  triggerRef,
 }) => {
-  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
+    null
+  );
   const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0 });
   const popoverRef = useRef<HTMLDivElement>(null);
 
@@ -31,9 +33,11 @@ const Popover: React.FC<PopoverProps> = ({
     return () => {
       // Cleanup if needed - only remove if it's still a child of body and has no children
       const existingContainer = document.getElementById('popover-root');
-      if (existingContainer && 
-          existingContainer.children.length === 0 && 
-          document.body.contains(existingContainer)) {
+      if (
+        existingContainer &&
+        existingContainer.children.length === 0 &&
+        document.body.contains(existingContainer)
+      ) {
         try {
           document.body.removeChild(existingContainer);
         } catch (error) {
@@ -48,42 +52,44 @@ const Popover: React.FC<PopoverProps> = ({
     if (isVisible && triggerRef?.current && popoverRef.current) {
       const triggerRect = triggerRef.current.getBoundingClientRect();
       const popoverRect = popoverRef.current.getBoundingClientRect();
-      
+
       let left = triggerRect.left;
       let top = triggerRect.top;
-      
+
       if (position === 'left') {
         left = triggerRect.left - popoverRect.width - 8; // 8px gap
       } else {
         left = triggerRect.right + 8; // 8px gap
       }
-      
+
       // Ensure popover stays within viewport
       if (left < 0) left = 8;
       if (left + popoverRect.width > window.innerWidth) {
         left = window.innerWidth - popoverRect.width - 8;
       }
-      
+
       if (top + popoverRect.height > window.innerHeight) {
         top = window.innerHeight - popoverRect.height - 8;
       }
-      
+
       setPopoverPosition({ top, left });
     }
   }, [isVisible, position, triggerRef]);
 
   if (!isVisible || !portalContainer) return null;
 
-  const arrowClasses = position === 'left'
-    ? 'right-0 top-4 transform translate-x-1 w-0 h-0 border-t-4 border-b-4 border-l-4 border-transparent border-l-white'
-    : 'left-0 top-4 transform -translate-x-1 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-white';
+  const arrowClasses =
+    position === 'left'
+      ? 'right-0 top-4 transform translate-x-1 w-0 h-0 border-t-4 border-b-4 border-l-4 border-transparent border-l-white'
+      : 'left-0 top-4 transform -translate-x-1 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-white';
 
-  const arrowBorderClasses = position === 'left'
-    ? 'right-0 top-4 transform translate-x-2 w-0 h-0 border-t-4 border-b-4 border-l-4 border-transparent border-l-gray-200'
-    : 'left-0 top-4 transform -translate-x-2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-gray-200';
+  const arrowBorderClasses =
+    position === 'left'
+      ? 'right-0 top-4 transform translate-x-2 w-0 h-0 border-t-4 border-b-4 border-l-4 border-transparent border-l-gray-200'
+      : 'left-0 top-4 transform -translate-x-2 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-gray-200';
 
   return createPortal(
-    <div 
+    <div
       ref={popoverRef}
       className="fixed w-80 bg-white border border-gray-200 rounded-lg shadow-xl z-[9999] p-4"
       style={{

@@ -11,4 +11,4 @@ export interface MindMapData {
   nodes: MapNode[];
 }
 
-export type { MindMapData as default }
+export type { MindMapData as default };

@@ -10,7 +10,7 @@ describe('App', () => {
         <App />
       </BrowserRouter>
     );
-    
+
     // Should be able to render the app component
     expect(container).toBeTruthy();
   });

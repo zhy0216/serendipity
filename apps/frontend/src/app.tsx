@@ -12,6 +12,6 @@ function App() {
       <Route path="/app" element={<AppPage />} />
     </Routes>
   );
-};
+}
 
 export default App;

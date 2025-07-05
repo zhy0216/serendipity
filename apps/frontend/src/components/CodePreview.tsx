@@ -5,15 +5,13 @@ interface CodePreviewProps {
   language?: string;
 }
 
-const CodePreview: React.FC<CodePreviewProps> = ({ 
-  code, 
-  language = 'typescript' 
+const CodePreview: React.FC<CodePreviewProps> = ({
+  code,
+  language = 'typescript',
 }) => {
   return (
     <pre className="whitespace-pre-wrap text-sm">
-      <code className={`language-${language}`}>
-        {code}
-      </code>
+      <code className={`language-${language}`}>{code}</code>
     </pre>
   );
 };

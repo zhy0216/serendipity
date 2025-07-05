@@ -1,17 +1,14 @@
-import OpenAI from "openai";
+import OpenAI from 'openai';
 
 // https://api.deepseek.com
 
 const openai = new OpenAI({
-    baseURL: 'https://openrouter.ai/api/v1',
-    apiKey: process.env.OPENROUTER_API_KEY
+  baseURL: 'https://openrouter.ai/api/v1',
+  apiKey: process.env.OPENROUTER_API_KEY,
 });
 
-
-
-
 export async function* getMindMap(keyword: string) {
-    const prompt = `
+  const prompt = `
 # 高级偶然发现提示词
 
 ## 目标
@@ -160,24 +157,24 @@ export async function* getMindMap(keyword: string) {
 - **深度**：超越表面层次的关联
 - **可行性**：洞察应该建议新的可能性或研究方向
 - **互联性**：元素应该相互引用和支持
-`
+`;
 
-    const stream = await openai.chat.completions.create({
-        messages: [
-            { role: "system", content: "You are a helpful assistant." },
-            { role: "user", content: prompt }
-        ],
-        model: "deepseek/deepseek-r1-0528",
-        stream: true,
-        response_format: {
-            type: 'json_object'
-        }
-    });
+  const stream = await openai.chat.completions.create({
+    messages: [
+      { role: 'system', content: 'You are a helpful assistant.' },
+      { role: 'user', content: prompt },
+    ],
+    model: 'deepseek/deepseek-r1-0528',
+    stream: true,
+    response_format: {
+      type: 'json_object',
+    },
+  });
 
-    for await (const chunk of stream) {
-      const content = chunk.choices[0]?.delta?.content || '';
-      if (content) {
-          yield content;
-      }
+  for await (const chunk of stream) {
+    const content = chunk.choices[0]?.delta?.content || '';
+    if (content) {
+      yield content;
     }
+  }
 }

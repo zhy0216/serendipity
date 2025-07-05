@@ -16,13 +16,13 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
   url,
   type = 'file',
   lineNumber,
-  preview
+  preview,
 }) => {
   const [showPreview, setShowPreview] = useState(false);
   const itemRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div 
+    <div
       ref={itemRef}
       className="relative group"
       onMouseEnter={() => setShowPreview(true)}
@@ -35,25 +35,26 @@ const SearchResultItem: React.FC<SearchResultItemProps> = ({
           <h3 className="text-lg text-blue-700 hover:text-blue-800 hover:underline leading-tight">
             {title}
           </h3>
-          <span className={`text-xs px-2 py-1 rounded-full text-blue-600 bg-blue-100 ml-2 flex-shrink-0`}>
+          <span
+            className={`text-xs px-2 py-1 rounded-full text-blue-600 bg-blue-100 ml-2 flex-shrink-0`}
+          >
             {type}
           </span>
         </div>
-        
+
         {/* URL path */}
         <div className="text-sm text-green-700 mb-1">
-          {url}{lineNumber && ` · 第 ${lineNumber} 行`}
+          {url}
+          {lineNumber && ` · 第 ${lineNumber} 行`}
         </div>
-        
+
         {/* Description */}
-        <p className="text-sm text-gray-600 leading-relaxed">
-          {description}
-        </p>
+        <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
       </div>
 
       {/* Preview popup on hover */}
-      <Popover 
-        isVisible={showPreview && !!preview} 
+      <Popover
+        isVisible={showPreview && !!preview}
         position="left"
         triggerRef={itemRef}
       >

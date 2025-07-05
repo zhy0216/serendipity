@@ -7,8 +7,8 @@ describe('streamparser', () => {
     });
 
     parser.onValue = ({ value }) => {
-        console.log("####################### value ##########")
-    console.log(value);
+      console.log('####################### value ##########');
+      console.log(value);
     };
 
     parser.write(`{
@@ -18,9 +18,9 @@ describe('streamparser', () => {
       "nodeName": "创造力的潜伏期",
       "connection": "无聊作为大脑的默认模式网络激活状态，为创意洞察创造条件",
 
-  `)
+  `);
 
-  parser.write(`
+    parser.write(`
       "insight": "无聊不是创造力的敌人，而是其必要的孕育期。大脑在看似无所事事时实际进行着最深层的模式识别和概念重组",
       "explorationMethods": ["逆向逻辑路径", "负空间探索"],
       "references": [
@@ -38,7 +38,5 @@ describe('streamparser', () => {
         "认知心理学中的时间知觉研究"
       ]
     },`);
-
-    
   });
 });

@@ -8,13 +8,12 @@ function AppPage() {
   const [searchParams] = useSearchParams();
   const { 
     mindMapData, 
-    streamingNodes,
-    isLoading, 
+    keywordsLoading, 
     error, 
-    searchQuery,
     selectedKeyword,
     setSelectedKeyword,
-    loadMindMapDataStreaming
+    loadMindMapDataStreaming,
+    keywords
   } = useAppStore();
 
   // Handle URL query parameter on initial load
@@ -68,7 +67,7 @@ function AppPage() {
             <input
               type="text"
               placeholder="Search keywords..."
-              value={searchQuery}
+              value={selectedKeyword ?? undefined}
               // onChange={(e) => searchQuery(e.target.value)}
               className="w-full px-4 py-2 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 hover:bg-white transition-colors"
             />
@@ -78,36 +77,15 @@ function AppPage() {
               </svg>
             </div>
           </div>
-          <NavCard 
-            keyword="serendipity" 
-            isLoading={isLoading}
-            isSelect={selectedKeyword === 'serendipity'}
-            onClick={() => setSelectedKeyword('serendipity')}
-          />
-          <NavCard 
-            keyword="ai" 
-            isLoading={isLoading}
-            isSelect={selectedKeyword === 'ai'}
-            onClick={() => setSelectedKeyword('ai')}
-          />
-          <NavCard 
-            keyword="data" 
-            isLoading={isLoading}
-            isSelect={selectedKeyword === 'data'}
-            onClick={() => setSelectedKeyword('data')}
-          />
-          <NavCard 
-            keyword="api" 
-            isLoading={isLoading}
-            isSelect={selectedKeyword === 'api'}
-            onClick={() => setSelectedKeyword('api')}
-          />
-          <NavCard 
-            keyword="test" 
-            isLoading={isLoading}
-            isSelect={selectedKeyword === 'test'}
-            onClick={() => setSelectedKeyword('test')}
-          />
+          {keywords.map((keyword) => (
+            <NavCard 
+            key={keyword}
+              keyword={keyword} 
+              isLoading={keywordsLoading[keyword]}
+              isSelect={selectedKeyword === keyword}
+              onClick={() => setSelectedKeyword(keyword)}
+            />
+          ))}
         </div>
       </nav>
 
@@ -121,26 +99,20 @@ function AppPage() {
         </header>
         <div className="p-8">
           {/* Show streaming nodes first, then final data */}
-          {(streamingNodes.size > 0 || (mindMapData && mindMapData.nodes)) && (
+          {(mindMapData && mindMapData.nodes) && (
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {/* Streaming nodes */}
-              {Array.from(streamingNodes.entries()).map(([index, { node, isComplete }]) => (
+              {Array.from(mindMapData.nodes.entries()).map(([index, node]) => (
                 node.nodeName ? (
                   <MindCard 
                     key={`streaming-${index}`} 
-                    node={node as any} 
-                    isLoading={!isComplete}
+                    node={node}
                   />
                 ) : null
               ))}
-              
-              {/* Final nodes (only show if streaming is complete) */}
-              {mindMapData && mindMapData.nodes && streamingNodes.size === 0 && mindMapData.nodes.map((node, index) => (
-                <MindCard key={`final-${index}`} node={node} />
-              ))}
             </div>
           )}
-          {!mindMapData && !isLoading && !error && streamingNodes.size === 0 && (
+          {!mindMapData && !keywordsLoading[selectedKeyword ?? ''] && !error && (
             <div className="text-center py-12">
               <div className="text-gray-500 text-lg">No mind connection data available</div>
             </div>

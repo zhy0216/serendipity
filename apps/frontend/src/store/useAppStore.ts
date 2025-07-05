@@ -5,27 +5,21 @@ import { createMindMapStream } from '../utils/streamingJsonParser';
 
 interface AppState {
   keywords: string[];
+  keywordsLoading: Record<string, boolean>
   // Mind map data
   mindMapData: MindMapData | null;
-  streamingNodes: Map<number, { node: Partial<MapNode>; isComplete: boolean }>;
-  isLoading: boolean;
   error: string | null;
-  
-  // Search functionality
-  searchQuery: string;
-  isSearching: boolean;
   
   // Navigation state
   selectedKeyword: string | null;
   
   // Actions
-  setMindMapData: (data: MindMapData | null) => void;
-  addStreamingNode: (index: number, node: Partial<MapNode>, isComplete: boolean) => void;
-  clearStreamingNodes: () => void;
-  setLoading: (loading: boolean) => void;
+  addMapNode: (node: MapNode) => void;
+  addKeyword: (keyword: string) => void;
+  hasKeyword: (keyword: string) => boolean;
+  removeKeyword: (keyword: string) => void;
+  setKeywordsLoading: (keyword: string, loading: boolean) => void;
   setError: (error: string | null) => void;
-  setSearchQuery: (query: string) => void;
-  setSearching: (searching: boolean) => void;
   setSelectedKeyword: (keyword: string | null) => void;
   loadMindMapDataStreaming: (keyword: string) => Promise<void>;
 }
@@ -34,32 +28,42 @@ export const useAppStore = create<AppState>((set, get) => ({
   // Initial state
   mindMapData: null,
   keywords: localStorage.getItem('keywords') ? JSON.parse(localStorage.getItem('keywords') as string) : [],
+  keywordsLoading: {},
   streamingNodes: new Map(),
-  isLoading: false,
   error: null,
-  searchQuery: '',
-  isSearching: false,
   selectedKeyword: null,
   
   // Actions
-  setMindMapData: (data) => set({ mindMapData: data }),
-  addStreamingNode: (index, node, isComplete) => {
-    const currentNodes = get().streamingNodes;
-    const newNodes = new Map(currentNodes);
-    newNodes.set(index, { node, isComplete });
-    set({ streamingNodes: newNodes });
+  addMapNode: (node) => {
+    const mindMapData = get().mindMapData;
+    if (mindMapData) {
+      const nodes = [...mindMapData.nodes];
+      nodes.push(node);
+      set({ mindMapData: { ...mindMapData, nodes } });
+    } else {
+      const currentKeyword = get().selectedKeyword ?? "";
+      set({ mindMapData: { centerNode: currentKeyword, nodes: [node] } });
+    }
   },
-  clearStreamingNodes: () => set({ streamingNodes: new Map() }),
-  setLoading: (loading) => set({ isLoading: loading }),
+  addKeyword: (keyword) => {
+    const currentKeywords = get().keywords;
+    const newKeywords = [...currentKeywords, keyword];
+    set({ keywords: newKeywords });
+  },
+  hasKeyword: (keyword) => get().keywords.includes(keyword),
+  removeKeyword: (keyword) => {
+    const currentKeywords = get().keywords;
+    const newKeywords = currentKeywords.filter(k => k !== keyword);
+    set({ keywords: newKeywords });
+  },
+  setKeywordsLoading: (keyword: string, loading: boolean) => set({ keywordsLoading: { ...get().keywordsLoading, [keyword]: loading } }),
   setError: (error) => set({ error }),
-  setSearchQuery: (query) => set({ searchQuery: query }),
-  setSearching: (searching) => set({ isSearching: searching }),
   setSelectedKeyword: (keyword) => set({ selectedKeyword: keyword }),
   
   loadMindMapDataStreaming: async (keyword: string) => {
+    const { setKeywordsLoading, addMapNode } = get()
     try {
-      set({ isLoading: true, error: null });
-      get().clearStreamingNodes();
+      setKeywordsLoading(keyword, true);
       
       // Check localStorage first
       const cacheKey = `mindmap_${keyword.toLowerCase().replace(/\s+/g, '_')}`;
@@ -70,9 +74,9 @@ export const useAppStore = create<AppState>((set, get) => ({
           const parsedData: MindMapData = JSON.parse(cachedData);
           // Load cached data immediately
           parsedData.nodes.forEach((node, index) => {
-            get().addStreamingNode(index, node, true);
+            addMapNode(node);
           });
-          set({ mindMapData: parsedData, isLoading: false });
+          setKeywordsLoading(keyword, false);
           return;
         } catch (parseError) {
           console.warn('Failed to parse cached data, fetching from API:', parseError);
@@ -84,18 +88,11 @@ export const useAppStore = create<AppState>((set, get) => ({
       // Fetch from API if no cache or cache is invalid
       let nodeIndex = 0;
       for await (const node of createMindMapStream(keyword)) {
-        get().addStreamingNode(nodeIndex, node, true);
+        addMapNode(node);
         nodeIndex++;
       }
       
-      // Convert streaming nodes to final mind map data
-      const streamingNodes = get().streamingNodes;
-      const nodes = Array.from(streamingNodes.values()).map(item => item.node as MapNode);
-      const mindMapData: MindMapData = {
-        centerNode: keyword,
-        nodes
-      };
-
+      const mindMapData = get().mindMapData;
       const keywords = [...get().keywords];
       keywords.push(keyword);
       
@@ -107,13 +104,13 @@ export const useAppStore = create<AppState>((set, get) => ({
         console.warn('Failed to cache data in localStorage:', storageError);
       }
       
-      set({ keywords, mindMapData, isLoading: false });
+      setKeywordsLoading(keyword, false);
     } catch (error) {
       console.error('Error loading mind map data:', error);
       set({ 
         error: error instanceof Error ? error.message : 'Failed to load mind map data', 
-        isLoading: false 
       });
+      setKeywordsLoading(keyword, false);
     }
   },
   

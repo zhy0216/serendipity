@@ -84,7 +84,7 @@ function SearchBox({
       </form>
 
       {/* Google-style buttons */}
-      <div className="flex justify-center mt-6 space-x-4">
+      {/* <div className="flex justify-center mt-6 space-x-4">
         <button
           onClick={handleSubmit}
           className="px-6 py-2 text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded hover:shadow-sm hover:border-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -111,7 +111,7 @@ function SearchBox({
         >
           I'm Feeling Lucky
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

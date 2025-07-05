@@ -7,7 +7,7 @@ import { useAppStore } from '../store/useAppStore';
 function AppPage() {
   const [searchParams] = useSearchParams();
   const { 
-    mindMapData, 
+    mindMapDataRecord, 
     keywordsLoading, 
     error, 
     selectedKeyword,
@@ -15,14 +15,15 @@ function AppPage() {
     loadMindMapDataStreaming,
     keywords
   } = useAppStore();
+  const mindMapData = mindMapDataRecord[selectedKeyword ?? ''];
 
   // Handle URL query parameter on initial load
   useEffect(() => {
     const queryParam = searchParams.get('q');
-    if (queryParam && !selectedKeyword) {
+    if (queryParam) {
       setSelectedKeyword(queryParam);
     }
-  }, [searchParams, selectedKeyword, setSelectedKeyword]);
+  }, [searchParams, setSelectedKeyword]);
 
   // Load mind map data when selectedKeyword changes
   useEffect(() => {

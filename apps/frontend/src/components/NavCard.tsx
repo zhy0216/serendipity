@@ -8,68 +8,60 @@ interface NavCardProps {
 const NavCard = ({ keyword, isSelect, isLoading = false, onClick }: NavCardProps) => {
   // Define styles for different states
   const selectedStyle = {
-    gradient: 'from-blue-50 to-blue-100',
-    border: 'border-blue-200',
-    hover: 'hover:bg-blue-100',
-    title: 'text-blue-800',
-    cursor: 'cursor-pointer'
+    gradient: 'from-blue-100 via-blue-200 to-blue-100',
+    border: 'border-blue-300',
+    hover: 'hover:from-blue-200 hover:via-blue-300 hover:to-blue-200',
+    title: 'text-blue-900 font-bold',
+    cursor: 'cursor-pointer',
+    shadow: 'shadow-lg ring-2 ring-blue-400'
   };
   
   const unselectedStyle = {
-    gradient: 'from-gray-50 to-gray-100',
+    gradient: 'from-gray-50 via-gray-100 to-gray-50',
     border: 'border-gray-200', 
-    hover: 'hover:bg-gray-100',
-    title: 'text-gray-800',
-    cursor: 'cursor-pointer'
+    hover: 'hover:from-gray-100 hover:via-gray-200 hover:to-gray-100',
+    title: 'text-gray-700',
+    cursor: 'cursor-pointer',
+    shadow: 'shadow-sm hover:shadow-md'
   };
   
-  const loadingStyle = {
-    gradient: '', // Will be overridden by inline style
-    border: 'border-gray-300',
-    hover: '',
-    title: 'text-gray-400 animate-pulse',
-    cursor: 'cursor-default'
-  };
+  const baseStyle = isSelect ? selectedStyle : unselectedStyle;
   
-  const style = isLoading ? loadingStyle : (isSelect ? selectedStyle : unselectedStyle);
-  
-  // Inline styles for loading animation
+  // Inline styles for loading animation - respects selected state
   const loadingInlineStyle = isLoading ? {
-    background: 'linear-gradient(90deg, #e5e7eb, #f3f4f6, #e5e7eb, #f3f4f6)',
+    background: 'linear-gradient(90deg, #dbeafe, #bfdbfe, #93c5fd, #bfdbfe, #dbeafe)',
     backgroundSize: '200% 100%',
-    animation: 'flowingGradient 2s ease-in-out infinite'
+    animation: 'flowingGradient 2.5s ease-in-out infinite'
   } : {};
   
   return (
     <>
       {/* Add custom keyframes for flowing gradient */}
-      {isLoading && (
-        <style dangerouslySetInnerHTML={{
-          __html: `
-            @keyframes flowingGradient {
-              0% {
-                background-position: 200% 0;
-              }
-              100% {
-                background-position: -200% 0;
-              }
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes flowingGradient {
+            0% {
+              background-position: 200% 0;
             }
-          `
-        }} />
-      )}
+            100% {
+              background-position: -200% 0;
+            }
+          }
+        `
+      }} />
       
       <div 
         className={`
-          ${isLoading ? '' : `bg-gradient-to-r ${style.gradient}`} 
-          rounded-lg p-4 border ${style.border} 
-          ${isLoading ? '' : 'hover:shadow-md transition-shadow duration-200'}
-          ${isSelect && !isLoading ? 'ring-2 ring-blue-500 shadow-lg' : ''}
-          ${style.hover} ${style.cursor} overflow-hidden
+          ${isLoading ? '' : `bg-gradient-to-r ${baseStyle.gradient}`} 
+          rounded-lg p-4 border ${baseStyle.border} 
+          ${isLoading ? '' : `transition-all duration-300 ${baseStyle.shadow}`}
+          ${isLoading ? '' : baseStyle.hover}
+          ${baseStyle.cursor} overflow-hidden
         `}
         style={loadingInlineStyle}
-        onClick={isLoading ? undefined : onClick}
+        onClick={onClick}
       >
-        <h3 className={`font-semibold ${style.title} text-center`}>
+        <h3 className={`font-semibold ${isLoading ? 'text-gray-400 animate-pulse' : baseStyle.title} text-center`}>
           {keyword}
         </h3>
       </div>

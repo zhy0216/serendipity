@@ -73,7 +73,9 @@ function SearchBox({
           />
 
           {/* Search Icon */}
-          <div className={`absolute ${sizeStyles[size].iconLeft} top-1/2 transform -translate-y-1/2 text-gray-400`}>
+          <div
+            className={`absolute ${sizeStyles[size].iconLeft} top-1/2 transform -translate-y-1/2 text-gray-400`}
+          >
             <svg
               className={sizeStyles[size].icon}
               fill="none"

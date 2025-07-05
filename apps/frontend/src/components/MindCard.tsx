@@ -2,7 +2,6 @@ import React from 'react';
 import { MapNode } from '@serendipity/types';
 import { useNavigate } from 'react-router-dom';
 
-
 interface MindCardProps {
   node: MapNode;
   isLoading?: boolean;
@@ -13,17 +12,16 @@ export const MindCard: React.FC<MindCardProps> = ({
   isLoading = false,
 }) => {
   const navigate = useNavigate();
-  
+
   return (
     <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-6 border border-gray-200 hover:border-gray-300 group relative">
-      {/* Loading indicator */}
-      {isLoading && (
-        <div className="absolute top-4 right-4">
-          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
-        </div>
-      )}
       {/* Node Name Header */}
-      <div className="mb-4 cursor-pointer" onClick={() => navigate(`/app?q=${encodeURIComponent(node.nodeName.trim())}`)}>
+      <div
+        className="mb-4 cursor-pointer"
+        onClick={() =>
+          navigate(`/app?q=${encodeURIComponent(node.nodeName.trim())}`)
+        }
+      >
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-200">
             {node.nodeName}
@@ -61,7 +59,7 @@ export const MindCard: React.FC<MindCardProps> = ({
       </div>
 
       {/* Exploration Method */}
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <div className="flex items-start gap-3">
           <div className="flex items-center text-sm font-semibold text-gray-600">
             <svg
@@ -88,7 +86,7 @@ export const MindCard: React.FC<MindCardProps> = ({
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* References */}
       {node.references && node.references.length > 0 && (
@@ -111,7 +109,7 @@ export const MindCard: React.FC<MindCardProps> = ({
             {node.references.map((ref, index) => (
               <button
                 key={index}
-                className="w-full text-left pl-3 py-2 transition-all duration-200 group/ref cursor-pointer relative before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-0.5 before:h-4 before:bg-gray-200 hover:before:bg-blue-500 before:transition-colors before:duration-200"
+                className="w-full text-left pl-3 transition-all duration-200 group/ref cursor-pointer relative before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-0.5 before:h-4 before:bg-gray-200 hover:before:bg-blue-500 before:transition-colors before:duration-200"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-600 group-hover/ref:text-blue-600 transition-colors duration-200 flex-1 pr-2">

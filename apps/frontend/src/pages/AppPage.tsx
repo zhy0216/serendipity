@@ -4,6 +4,8 @@ import NavCard from '../components/NavCard';
 import { MindCard } from '../components/MindCard';
 import SearchBox from '../components/SearchBox';
 import { useAppStore } from '../store/useAppStore';
+import { useNavigate } from 'react-router-dom';
+
 
 function AppPage() {
   const [searchParams] = useSearchParams();
@@ -17,6 +19,7 @@ function AppPage() {
     keywords,
   } = useAppStore();
   const mindMapData = mindMapDataRecord[selectedKeyword ?? ''];
+  const navigate = useNavigate();
 
   // Handle URL query parameter on initial load
   useEffect(() => {
@@ -54,7 +57,7 @@ function AppPage() {
           <h2 className="text-lg font-bold text-gray-800">Serendipity</h2>
           <Link
             to="/"
-            className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+            className="text-sm text-blue-500 hover:text-blue-800 transition-colors"
             title="Back to Home"
           >
             <svg
@@ -74,17 +77,14 @@ function AppPage() {
         </div>
         <div className="p-4 space-y-3">
           {/* Search Box */}
-          <SearchBox
-            placeholder="输入关键字..."
-            size="sm"
-          />
+          <SearchBox placeholder="输入关键字..." size="sm" />
           {keywords.map((keyword) => (
             <NavCard
               key={keyword}
               keyword={keyword}
               isLoading={keywordsLoading[keyword]}
               isSelect={selectedKeyword === keyword}
-              onClick={() => setSelectedKeyword(keyword)}
+              onClick={() => navigate(`/app?q=${encodeURIComponent(keyword.trim())}`)}
             />
           ))}
         </div>
@@ -93,12 +93,8 @@ function AppPage() {
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto">
         <header className="bg-white shadow-sm border-b border-gray-200 px-8 py-6">
-          <h1 className="text-3xl font-bold text-gray-900">
-            思维连接卡片
-          </h1>
-          <p className="text-gray-600 mt-2">
-            探索思想之间的深层连接
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900">思维连接卡片</h1>
+          <p className="text-gray-600 mt-2">探索思想之间的深层连接</p>
         </header>
         <div className="p-8">
           {/* Show streaming nodes first, then final data */}
@@ -110,6 +106,11 @@ function AppPage() {
                   <MindCard key={`streaming-${index}`} node={node} />
                 ) : null
               )}
+            </div>
+          )}
+          {keywordsLoading[selectedKeyword ?? ''] && (
+            <div className="flex justify-center items-center py-8">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
             </div>
           )}
           {!mindMapData &&

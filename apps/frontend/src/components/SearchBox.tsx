@@ -5,15 +5,39 @@ interface SearchBoxProps {
   placeholder?: string;
   onSearch?: (query: string) => void;
   className?: string;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 function SearchBox({
   placeholder = 'Search for ideas, concepts, or topics...',
   onSearch,
   className = '',
+  size = 'lg',
 }: SearchBoxProps) {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
+
+  // Size-based styling
+  const sizeStyles = {
+    sm: {
+      input: 'px-4 py-2 pl-10 pr-10 text-sm rounded-lg',
+      icon: 'w-4 h-4',
+      iconLeft: 'left-3',
+      iconRight: 'right-3',
+    },
+    md: {
+      input: 'px-4 py-2.5 pl-11 pr-11 text-base rounded-lg',
+      icon: 'w-4 h-4',
+      iconLeft: 'left-3.5',
+      iconRight: 'right-3.5',
+    },
+    lg: {
+      input: 'px-4 py-3 pl-12 pr-12 text-lg rounded-full',
+      icon: 'w-5 h-5',
+      iconLeft: 'left-4',
+      iconRight: 'right-4',
+    },
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,15 +67,15 @@ function SearchBox({
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className="w-full px-4 py-3 pl-12 pr-12 text-lg border border-gray-300 rounded-full shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+            className={`w-full ${sizeStyles[size].input} border border-gray-300 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200`}
             autoComplete="off"
             spellCheck="false"
           />
 
           {/* Search Icon */}
-          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+          <div className={`absolute ${sizeStyles[size].iconLeft} top-1/2 transform -translate-y-1/2 text-gray-400`}>
             <svg
-              className="w-5 h-5"
+              className={sizeStyles[size].icon}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -70,10 +94,10 @@ function SearchBox({
             <button
               type="button"
               onClick={() => setQuery('')}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              className={`absolute ${sizeStyles[size].iconRight} top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors`}
             >
               <svg
-                className="w-5 h-5"
+                className={sizeStyles[size].icon}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

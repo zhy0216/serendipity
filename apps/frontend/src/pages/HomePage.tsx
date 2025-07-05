@@ -36,7 +36,7 @@ function HomePage() {
 
         {/* Search Box */}
         <div className="w-full max-w-xl">
-          <SearchBox placeholder="Search for ideas, concepts, or topics..." />
+          <SearchBox placeholder="搜索想法、概念或主题..." />
         </div>
 
         {/* Additional Options */}

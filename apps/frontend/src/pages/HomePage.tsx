@@ -1,4 +1,5 @@
 import SearchBox from '../components/SearchBox';
+import KeywordMarquee from '../components/KeywordMarquee';
 
 function HomePage() {
   return (
@@ -32,11 +33,40 @@ function HomePage() {
           <h1 className="text-7xl md:text-8xl font-light text-gray-700 mb-4 text-center">
             <span className="text-blue-500">Serendipity</span>
           </h1>
+          <p className="text-xl text-gray-600 text-center mt-4">
+            探索未知的知识领域
+          </p>
         </div>
 
         {/* Search Box */}
         <div className="w-full max-w-xl">
           <SearchBox placeholder="搜索想法、概念或主题..." />
+        </div>
+
+        {/* What Others Are Exploring */}
+        <div className="mt-16 w-full max-w-4xl">
+          <h2 className="text-2xl font-light text-gray-700 text-center mb-8">
+            其他人正在探索
+          </h2>
+
+          {/* Scrolling Keywords */}
+          <KeywordMarquee
+            keywords={[
+              '人工智能',
+              '量子计算',
+              '存在主义',
+              '区块链技术',
+              '神经科学',
+              '可持续发展',
+              '心理学',
+              '生物技术',
+              '太空探索',
+              '文学理论',
+            ]}
+            onKeywordClick={(keyword) =>
+              console.log('Clicked keyword:', keyword)
+            }
+          />
         </div>
 
         {/* Additional Options */}

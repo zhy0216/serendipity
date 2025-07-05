@@ -6,7 +6,6 @@ import SearchBox from '../components/SearchBox';
 import { useAppStore } from '../store/useAppStore';
 import { useNavigate } from 'react-router-dom';
 
-
 function AppPage() {
   const [searchParams] = useSearchParams();
   const {
@@ -84,7 +83,9 @@ function AppPage() {
               keyword={keyword}
               isLoading={keywordsLoading[keyword]}
               isSelect={selectedKeyword === keyword}
-              onClick={() => navigate(`/app?q=${encodeURIComponent(keyword.trim())}`)}
+              onClick={() =>
+                navigate(`/app?q=${encodeURIComponent(keyword.trim())}`)
+              }
             />
           ))}
         </div>

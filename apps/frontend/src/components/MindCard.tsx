@@ -1,5 +1,7 @@
 import React from 'react';
 import { MapNode } from '@serendipity/types';
+import { useNavigate } from 'react-router-dom';
+
 
 interface MindCardProps {
   node: MapNode;
@@ -10,6 +12,8 @@ export const MindCard: React.FC<MindCardProps> = ({
   node,
   isLoading = false,
 }) => {
+  const navigate = useNavigate();
+  
   return (
     <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-6 border border-gray-200 hover:border-gray-300 group relative">
       {/* Loading indicator */}
@@ -19,10 +23,27 @@ export const MindCard: React.FC<MindCardProps> = ({
         </div>
       )}
       {/* Node Name Header */}
-      <div className="mb-4 cursor-pointer">
-        <h3 className="text-xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-200">
-          {node.nodeName}
-        </h3>
+      <div className="mb-4 cursor-pointer" onClick={() => navigate(`/app?q=${encodeURIComponent(node.nodeName.trim())}`)}>
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-200">
+            {node.nodeName}
+          </h3>
+          <div className="flex items-center text-gray-400 group-hover:text-blue-500 transition-colors duration-200">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
+        </div>
       </div>
 
       {/* Connection Description */}

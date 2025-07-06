@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import NavCard from '../components/NavCard';
 import { MindCard } from '../components/MindCard';
 import SearchBox from '../components/SearchBox';
+import ProgressSteps from '../components/ProgressSteps';
 import { useAppStore } from '../store/useAppStore';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,11 +38,6 @@ function AppPage() {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl">Loading mind map data...</div>
-        </div>
-      )} */}
       {error && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded">
@@ -102,6 +98,20 @@ function AppPage() {
           )}
         </header>
         <div className="p-8">
+          <ProgressSteps
+            keyword={selectedKeyword ?? ''}
+            isLoading={true}
+            visible={true}
+            // isLoading={keywordsLoading[selectedKeyword] || false}
+            onCancel={() => {
+              // TODO: Cancel request logic if needed
+              console.log('Cancel request');
+            }}
+            onComplete={() => {
+              // Progress completed, component will hide automatically
+              console.log('Progress completed');
+            }}
+          />
           {/* Show streaming nodes first, then final data */}
           {mindMapData && mindMapData.nodes && (
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -111,11 +121,6 @@ function AppPage() {
                   <MindCard key={`streaming-${index}`} node={node} />
                 ) : null
               )}
-            </div>
-          )}
-          {keywordsLoading[selectedKeyword ?? ''] && (
-            <div className="flex justify-center items-center py-8">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
             </div>
           )}
           {!mindMapData &&

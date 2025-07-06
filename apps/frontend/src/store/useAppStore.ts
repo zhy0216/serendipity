@@ -80,12 +80,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   loadMindMapDataStreaming: async (keyword: string) => {
-    const {
-      setKeywordsLoading,
-      keywordsLoading,
-      addMapNode,
-      mindMapDataRecord,
-    } = get();
+    const { setKeywordsLoading, addMapNode } = get();
 
     try {
       // Check localStorage first
@@ -111,7 +106,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         }
       }
 
-      if (keywordsLoading[keyword]) {
+      if (get().keywordsLoading[keyword]) {
         return;
       }
       setKeywordsLoading(keyword, true);
@@ -122,7 +117,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         nodeIndex++;
       }
 
-      const mindMapData = mindMapDataRecord[keyword];
+      const mindMapData = get().mindMapDataRecord[keyword];
       const keywords = [...get().keywords];
       if (!keywords.includes(keyword)) {
         keywords.push(keyword);

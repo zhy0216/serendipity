@@ -1,5 +1,5 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import NavCard from '../components/NavCard';
 import { MindCard } from '../components/MindCard';
 import SearchBox from '../components/SearchBox';
@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 function AppPage() {
   const [searchParams] = useSearchParams();
+  const navRef = useRef<HTMLDivElement>(null);
   const {
     mindMapDataRecord,
     keywordsLoading,
@@ -37,6 +38,13 @@ function AppPage() {
     }
   }, [selectedKeyword, loadMindMapDataStreaming]);
 
+  // Scroll navigation bar to top when selectedKeyword changes
+  useEffect(() => {
+    if (selectedKeyword && navRef.current) {
+      navRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [selectedKeyword]);
+
   return (
     <div className="flex h-screen bg-gray-50">
       {error && (
@@ -48,7 +56,10 @@ function AppPage() {
       )}
 
       {/* Left Navigation Bar - Card Display */}
-      <nav className="w-64 bg-white shadow-lg border-r border-gray-200 overflow-y-auto">
+      <nav
+        ref={navRef}
+        className="w-64 bg-white shadow-lg border-r border-gray-200 overflow-y-auto"
+      >
         <div className="p-4 border-b border-gray-200 flex items-center justify-between">
           <h2 className="text-lg font-bold text-gray-800">Serendipity</h2>
           <Link
@@ -74,17 +85,54 @@ function AppPage() {
         <div className="p-4 space-y-3">
           {/* Search Box */}
           <SearchBox placeholder="输入关键字..." size="sm" />
-          {keywords.map((keyword) => (
-            <NavCard
-              key={keyword}
-              keyword={keyword}
-              isLoading={keywordsLoading[keyword]}
-              isSelect={selectedKeyword === keyword}
-              onClick={() =>
-                navigate(`/app?q=${encodeURIComponent(keyword.trim())}`)
-              }
-            />
-          ))}
+          <div className="space-y-3 relative">
+            {keywords.map((keyword, index) => (
+              <div
+                key={`${keyword}-${index}`}
+                className="nav-card-item transform transition-all duration-200 ease-out"
+                style={{
+                  transitionDelay: `${index * 80}ms`,
+                  zIndex: keywords.length - index,
+                }}
+              >
+                <NavCard
+                  keyword={keyword}
+                  isLoading={keywordsLoading[keyword]}
+                  isSelect={selectedKeyword === keyword}
+                  onClick={() =>
+                    navigate(`/app?q=${encodeURIComponent(keyword.trim())}`)
+                  }
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Add custom CSS for smooth list animations */}
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+                .nav-card-item {
+                  transform-origin: center;
+                  transition: transform 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+                }
+                
+                @keyframes slideInFromBottom {
+                  0% {
+                    transform: translateY(20px);
+                    opacity: 0;
+                  }
+                  100% {
+                    transform: translateY(0);
+                    opacity: 1;
+                  }
+                }
+                
+                .nav-card-item:first-child {
+                  animation: slideInFromBottom 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+                }
+              `,
+            }}
+          />
         </div>
       </nav>
 

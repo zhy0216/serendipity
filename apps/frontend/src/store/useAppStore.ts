@@ -79,7 +79,37 @@ export const useAppStore = create<AppState>((set, get) => ({
   setError: (error) => set({ error }),
   setSelectedKeyword: (keyword) => {
     set({ selectedKeyword: keyword });
-    get().addKeyword(keyword);
+
+    // Only move keyword to front if it's not currently loading
+    const isLoading = get().keywordsLoading[keyword];
+    if (!isLoading) {
+      // Move the keyword to the front of the keywords array
+      const currentKeywords = get().keywords;
+      const newKeywords = currentKeywords.filter((k) => k !== keyword);
+      newKeywords.unshift(keyword);
+
+      set({ keywords: newKeywords });
+
+      // Update localStorage with the new order
+      try {
+        localStorage.setItem('keywords', JSON.stringify(newKeywords));
+      } catch (error) {
+        console.warn('Failed to update keywords in localStorage:', error);
+      }
+    } else {
+      // If loading, just ensure the keyword exists in the array
+      const currentKeywords = get().keywords;
+      if (!currentKeywords.includes(keyword)) {
+        const newKeywords = [...currentKeywords, keyword];
+        set({ keywords: newKeywords });
+
+        try {
+          localStorage.setItem('keywords', JSON.stringify(newKeywords));
+        } catch (error) {
+          console.warn('Failed to update keywords in localStorage:', error);
+        }
+      }
+    }
   },
   setMindMapData: (keyword: string, mindMapData: MindMapData) => {
     set({

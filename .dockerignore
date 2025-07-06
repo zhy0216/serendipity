@@ -1,0 +1,76 @@
+# Node modules
+node_modules
+*/node_modules
+npm-debug.log*
+
+# Build outputs
+dist
+build
+.next
+.nx
+
+# Development files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git
+.git
+.gitignore
+README.md
+
+# Test files
+coverage
+*.lcov
+.nyc_output
+
+# Logs
+logs
+*.log
+
+# Temporary files
+tmp
+temp
+.tmp
+
+# Database
+*.sqlite
+*.db
+
+# Documentation
+docs
+*.md
+
+# Docker files
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Development tools
+.prettierrc
+.prettierignore
+jest.config.*
+.eslintrc.*
+
+# Cache directories
+.cache
+.vite
+.parcel-cache
+
+frontend-dist/

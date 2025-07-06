@@ -93,14 +93,18 @@ function AppPage() {
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto">
-        <header className="bg-white shadow-sm border-b border-gray-200 px-8 py-6">
-          <h1 className="text-3xl font-bold text-gray-900">思维连接卡片</h1>
-          <p className="text-gray-600 mt-2">探索思想之间的深层连接</p>
+        <header className="bg-white text-center shadow-sm border-b border-gray-200 px-8 py-6">
+          <h1 className="text-3xl font-bold text-gray-900">
+            {selectedKeyword ? selectedKeyword : '思维连接卡片'}
+          </h1>
+          {!selectedKeyword && (
+            <p className="text-gray-600 mt-2">探索思想之间的深层连接</p>
+          )}
         </header>
         <div className="p-8">
           {/* Show streaming nodes first, then final data */}
           {mindMapData && mindMapData.nodes && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
               {/* Streaming nodes */}
               {Array.from(mindMapData.nodes.entries()).map(([index, node]) =>
                 node.nodeName ? (
@@ -119,7 +123,7 @@ function AppPage() {
             !error && (
               <div className="text-center py-12">
                 <div className="text-gray-500 text-lg">
-                  No mind connection data available
+                  {selectedKeyword ? '没有相关数据' : '请选择一个主题'}
                 </div>
               </div>
             )}

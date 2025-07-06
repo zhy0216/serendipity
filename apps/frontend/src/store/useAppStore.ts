@@ -5,6 +5,7 @@ import { createMindMapStream } from '../utils/streamingJsonParser';
 interface AppState {
   keywords: string[];
   keywordsLoading: Record<string, boolean>;
+  keywordsStartLoading: Record<string, boolean>;
   // Mind map data
   mindMapDataRecord: Record<string, MindMapData>;
   error: string | null;
@@ -18,6 +19,7 @@ interface AppState {
   hasKeyword: (keyword: string) => boolean;
   removeKeyword: (keyword: string) => void;
   setKeywordsLoading: (keyword: string, loading: boolean) => void;
+  setMindMapData: (keyword: string, mindMapData: MindMapData) => void;
   setError: (error: string | null) => void;
   setSelectedKeyword: (keyword: string) => void;
   loadMindMapDataStreaming: (keyword: string) => Promise<void>;
@@ -30,6 +32,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     ? JSON.parse(localStorage.getItem('keywords') as string)
     : [],
   keywordsLoading: {},
+  keywordsStartLoading: {},
   streamingNodes: new Map(),
   error: null,
   selectedKeyword: null,
@@ -78,9 +81,14 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ selectedKeyword: keyword });
     get().addKeyword(keyword);
   },
+  setMindMapData: (keyword: string, mindMapData: MindMapData) => {
+    set({
+      mindMapDataRecord: { ...get().mindMapDataRecord, [keyword]: mindMapData },
+    });
+  },
 
   loadMindMapDataStreaming: async (keyword: string) => {
-    const { setKeywordsLoading, addMapNode } = get();
+    const { setKeywordsLoading, addMapNode, setMindMapData } = get();
 
     try {
       // Check localStorage first
@@ -91,9 +99,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         try {
           const parsedData: MindMapData = JSON.parse(cachedData);
           // Load cached data immediately
-          parsedData.nodes.forEach((node, index) => {
-            addMapNode(keyword, node);
-          });
+          setMindMapData(keyword, parsedData);
           setKeywordsLoading(keyword, false);
           return;
         } catch (parseError) {
@@ -113,6 +119,14 @@ export const useAppStore = create<AppState>((set, get) => ({
       // Fetch from API if no cache or cache is invalid
       let nodeIndex = 0;
       for await (const node of createMindMapStream(keyword)) {
+        if (nodeIndex === 0) {
+          set({
+            keywordsStartLoading: {
+              ...get().keywordsStartLoading,
+              [keyword]: true,
+            },
+          });
+        }
         addMapNode(keyword, node);
         nodeIndex++;
       }

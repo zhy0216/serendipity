@@ -12,6 +12,7 @@ function AppPage() {
   const {
     mindMapDataRecord,
     keywordsLoading,
+    keywordsStartLoading,
     error,
     selectedKeyword,
     setSelectedKeyword,
@@ -100,8 +101,11 @@ function AppPage() {
         <div className="p-8">
           <ProgressSteps
             keyword={selectedKeyword ?? ''}
-            isLoading={true}
-            visible={true}
+            isLoading={keywordsLoading[selectedKeyword ?? ''] || false}
+            visible={
+              !keywordsStartLoading[selectedKeyword ?? ''] &&
+              keywordsLoading[selectedKeyword ?? '']
+            }
             // isLoading={keywordsLoading[selectedKeyword] || false}
             onCancel={() => {
               // TODO: Cancel request logic if needed

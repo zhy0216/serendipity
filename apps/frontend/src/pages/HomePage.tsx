@@ -1,9 +1,34 @@
 import SearchBox from '../components/SearchBox';
 import KeywordMarquee from '../components/KeywordMarquee';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 function HomePage() {
   const navigate = useNavigate();
+  const [keywords, setKeywords] = useState<string[]>([
+    '人工智能',
+    '量子计算',
+    '存在主义',
+    '区块链技术',
+    '神经科学',
+    '可持续发展',
+    '心理学',
+    '生物技术',
+    '太空探索',
+    '文学理论',
+  ]);
+
+  useEffect(() => {
+    fetch('/api/getLastKeywords?limit=10')
+      .then((response) => response.json())
+      .then((data) => {
+        setKeywords(data.keywords);
+      })
+      .catch((error) => {
+        console.error('Error fetching last keywords:', error);
+      });
+  }, []);
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
@@ -53,18 +78,7 @@ function HomePage() {
 
           {/* Scrolling Keywords */}
           <KeywordMarquee
-            keywords={[
-              '人工智能',
-              '量子计算',
-              '存在主义',
-              '区块链技术',
-              '神经科学',
-              '可持续发展',
-              '心理学',
-              '生物技术',
-              '太空探索',
-              '文学理论',
-            ]}
+            keywords={keywords}
             onKeywordClick={(keyword) =>
               navigate(`/app?q=${encodeURIComponent(keyword.trim())}`)
             }

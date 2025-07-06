@@ -110,3 +110,15 @@ export async function getKeywordClickStats(keyword?: string) {
 
   return await query.execute();
 }
+
+export async function getLastKeywords(limit: number): Promise<string[]> {
+  const result = await db
+    .selectFrom('KeywordClickLog')
+    .select(['keyword', 'createdAt'])
+    .distinctOn('keyword')
+    .orderBy('keyword')
+    .orderBy('createdAt', 'desc')
+    .limit(limit)
+    .execute();
+  return result.map((item) => item.keyword);
+}

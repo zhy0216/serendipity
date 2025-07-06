@@ -6,6 +6,7 @@ import {
   createSearchResult,
   findSearchResultsByKeyword,
   createKeywordClickLog,
+  getLastKeywords,
 } from './repository';
 
 const app = new Hono();
@@ -91,6 +92,17 @@ app.post('/api/keywordClickLog', async (c) => {
   } catch (error) {
     console.error('Error logging keyword click:', error);
     return c.json({ error: 'Failed to log keyword click' }, 500);
+  }
+});
+
+app.get('/api/getLastKeywords', async (c) => {
+  try {
+    const limit = c.req.query('limit') || 10;
+    const keywords = await getLastKeywords(Number(limit));
+    return c.json({ keywords });
+  } catch (error) {
+    console.error('Error getting last keywords:', error);
+    return c.json({ error: 'Failed to get last keywords' }, 500);
   }
 });
 

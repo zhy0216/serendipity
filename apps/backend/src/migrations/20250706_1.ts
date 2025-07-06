@@ -8,7 +8,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('keyword', 'varchar', (col) => col.notNull())
     .addColumn('model', 'varchar', (col) => col.notNull())
     .addColumn('result', 'json')
-    .addColumn('createdAt', 'timestamp', (col) => 
+    .addColumn('createdAt', 'timestamp', (col) =>
       col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
     .execute();
@@ -25,18 +25,17 @@ export async function up(db: Kysely<any>): Promise<void> {
     .createTable('KeywordClickLog')
     .addColumn('id', 'serial', (col) => col.primaryKey())
     .addColumn('keyword', 'varchar', (col) => col.notNull())
-    .addColumn('createdAt', 'timestamp', (col) => 
+    .addColumn('createdAt', 'timestamp', (col) =>
       col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull()
     )
     .execute();
 
-    // Create index on createdAt for better search performance
-    await db.schema
-      .createIndex('keywordClickLog_createdAt_idx')
-      .on('KeywordClickLog')
-      .column('createdAt')
-      .execute();
-
+  // Create index on createdAt for better search performance
+  await db.schema
+    .createIndex('keywordClickLog_createdAt_idx')
+    .on('KeywordClickLog')
+    .column('createdAt')
+    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {

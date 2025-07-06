@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "serve": "nx run-many -t serve -p backend frontend"
+    "serve": "nx run-many -t serve -p backend frontend",
     "ci": "nx run-many -t lint test build -p frontend backend types",
+    "migrate:db": "nx migrate:db backend",
+    "generateTypes": "kysely-codegen --out-file ./packages/types/src/dbType.ts",
     "format": "npx prettier --write .",
     "typecheck": "nx run-many -t typecheck -p frontend backend types"
   },
@@ -12,9 +14,12 @@
   "dependencies": {
     "@hono/node-server": "^1.14.4",
     "@streamparser/json": "^0.0.22",
+    "@types/pg": "^8.15.4",
     "hono": "^4.8.3",
     "kysely": "^0.28.2",
+    "kysely-codegen": "^0.18.5",
     "openai": "^5.8.2",
+    "pg": "^8.16.3",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-router-dom": "6.29.0",
@@ -49,6 +54,7 @@
     "jest-environment-node": "^29.7.0",
     "jiti": "2.4.2",
     "jsdom": "~22.1.0",
+    "kysely-ctl": "^0.13.1",
     "nx": "21.2.1",
     "postcss": "8.4.38",
     "prettier": "^2.6.2",

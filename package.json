@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "serve": "nx run-many -t serve -p backend frontend",
-    "ci": "nx run-many -t lint test build -p frontend backend types --no-cloud",
+    "test": "nx run-many -t lint test build -p frontend backend types",
+    "ci": "npm run test && npm run typecheck",
     "migrate:db": "nx migrate:db backend",
     "generateTypes": "kysely-codegen --out-file ./packages/types/src/dbType.ts",
     "format": "npx prettier --write .",

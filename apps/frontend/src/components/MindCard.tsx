@@ -22,11 +22,11 @@ export const MindCard: React.FC<MindCardProps> = ({
           navigate(`/app?q=${encodeURIComponent(node.nodeName.trim())}`)
         }
       >
-        <div className="flex items-center justify-between">
-          <h3 className="text-xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-200">
+        <div className="flex items-center justify-between group/head">
+          <h3 className="text-xl font-bold text-gray-800 group-hover/head:text-gray-900 transition-colors duration-200">
             {node.nodeName}
           </h3>
-          <div className="flex items-center text-gray-400 group-hover:text-blue-500 transition-colors duration-200">
+          <div className="flex items-center text-gray-400 group-hover/head:text-blue-500 transition-colors duration-200">
             <svg
               className="w-5 h-5"
               fill="none"
@@ -112,7 +112,17 @@ export const MindCard: React.FC<MindCardProps> = ({
                 className="w-full text-left pl-3 transition-all duration-200 group/ref cursor-pointer relative before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-0.5 before:h-4 before:bg-gray-200 hover:before:bg-blue-500 before:transition-colors before:duration-200"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-600 group-hover/ref:text-blue-600 transition-colors duration-200 flex-1 pr-2">
+                  <span
+                    onClick={() =>
+                      window.open(
+                        `https://www.google.com/search?q=${encodeURIComponent(
+                          ref
+                        )}`,
+                        '_blank'
+                      )
+                    }
+                    className="text-xs text-gray-600 group-hover/ref:text-blue-600 transition-colors duration-200 flex-1 pr-2"
+                  >
                     {ref}
                   </span>
                   <svg

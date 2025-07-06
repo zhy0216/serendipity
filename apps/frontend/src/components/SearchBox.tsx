@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppStore } from '../store/useAppStore';
 
 interface SearchBoxProps {
   placeholder?: string;
@@ -15,7 +16,12 @@ function SearchBox({
   size = 'lg',
 }: SearchBoxProps) {
   const [query, setQuery] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const navigate = useNavigate();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+  const { keywords } = useAppStore();
 
   // Size-based styling
   const sizeStyles = {
@@ -39,35 +45,115 @@ function SearchBox({
     },
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Get filtered suggestions
+  const suggestions = query.trim()
+    ? [
+        query.trim(), // First item is always the user input
+        ...keywords
+          .filter(
+            (keyword) =>
+              keyword.toLowerCase().includes(query.toLowerCase()) &&
+              keyword.toLowerCase() !== query.toLowerCase()
+          )
+          .slice(0, 5), // Limit to 5 keyword suggestions
+      ]
+    : [];
+
+  const handleSubmit = (e: React.FormEvent, selectedQuery?: string) => {
     e.preventDefault();
-    if (query.trim()) {
+    const queryToUse = selectedQuery || query.trim();
+    if (queryToUse) {
+      setShowSuggestions(false);
       if (onSearch) {
-        onSearch(query.trim());
+        onSearch(queryToUse);
       } else {
         // Default behavior: navigate to app page with query parameter
-        navigate(`/app?q=${encodeURIComponent(query.trim())}`);
+        navigate(`/app?q=${encodeURIComponent(queryToUse)}`);
       }
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSubmit(e);
+    if (!showSuggestions || suggestions.length === 0) {
+      if (e.key === 'Enter') {
+        handleSubmit(e);
+      }
+      return;
+    }
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedIndex((prev) =>
+          prev < suggestions.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
+          handleSubmit(e, suggestions[selectedIndex]);
+        } else {
+          handleSubmit(e);
+        }
+        break;
+      case 'Escape':
+        setShowSuggestions(false);
+        setSelectedIndex(-1);
+        break;
     }
   };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setQuery(value);
+    setShowSuggestions(value.trim().length > 0);
+    setSelectedIndex(-1);
+  };
+
+  const handleSuggestionClick = (suggestion: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    handleSubmit(e as any, suggestion);
+  };
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node) &&
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target as Node)
+      ) {
+        setShowSuggestions(false);
+        setSelectedIndex(-1);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <div className={`relative w-full max-w-xl mx-auto ${className}`}>
       <form onSubmit={handleSubmit} className="relative">
         <div className="relative group">
           <input
+            ref={inputRef}
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={handleInputChange}
             onKeyDown={handleKeyDown}
+            onFocus={() => query.trim() && setShowSuggestions(true)}
             placeholder={placeholder}
-            className={`w-full ${sizeStyles[size].input} border border-gray-300 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200`}
+            className={`w-full ${
+              sizeStyles[size].input
+            } border border-gray-300 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+              showSuggestions && suggestions.length > 0 ? 'rounded-b-none' : ''
+            }`}
             autoComplete="off"
             spellCheck="false"
           />
@@ -118,6 +204,66 @@ function SearchBox({
         {/* Hidden submit button for form submission */}
         <button type="submit" className="hidden" />
       </form>
+
+      {/* Suggestions dropdown */}
+      {showSuggestions && suggestions.length > 0 && (
+        <div
+          ref={suggestionsRef}
+          className="absolute top-full left-0 right-0 bg-white border border-t-0 border-gray-300 rounded-b-lg shadow-lg z-10 max-h-60 overflow-y-auto"
+        >
+          {suggestions.map((suggestion, index) => (
+            <div
+              key={index}
+              onClick={(e) => handleSuggestionClick(suggestion, e)}
+              className={`px-4 py-3 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors ${
+                index === selectedIndex
+                  ? 'bg-blue-50 text-blue-700'
+                  : 'hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center space-x-3">
+                {index === 0 ? (
+                  // Search icon for the first item (user input)
+                  <svg
+                    className="w-4 h-4 text-gray-400 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                ) : (
+                  // History icon for existing keywords
+                  <svg
+                    className="w-4 h-4 text-gray-400 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                )}
+                <span className="truncate">{suggestion}</span>
+                {index === 0 && (
+                  <span className="text-xs text-gray-500 ml-auto flex-shrink-0">
+                    搜索
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Google-style buttons */}
       {/* <div className="flex justify-center mt-6 space-x-4">

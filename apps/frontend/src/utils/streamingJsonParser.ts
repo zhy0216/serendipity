@@ -114,7 +114,6 @@ export function isCompleteMapNode(obj: any): boolean {
     obj.nodeName &&
     obj.connection &&
     obj.insight &&
-    obj.explorationMethods &&
     obj.references
   );
 }

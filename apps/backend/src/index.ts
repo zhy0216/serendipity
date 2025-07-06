@@ -47,12 +47,13 @@ app.get('/api/mindMap', async (c) => {
         const mindMapData = JSON.parse(completeResult);
         await createSearchResult({
           keyword,
-          model: 'deepseek/deepseek-r1-0528',
+          model: process.env.AI_MODEL as string,
           result: mindMapData,
         });
         console.log(`Saved search result for keyword: ${keyword}`);
       } catch (saveError) {
         console.error('Error saving search result:', saveError);
+        console.log('####### completeResult:', completeResult);
       }
 
       await stream.writeSSE({

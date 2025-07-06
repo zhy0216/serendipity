@@ -3,19 +3,33 @@ import OpenAI from 'openai';
 // https://api.deepseek.com
 
 const openai = new OpenAI({
-  baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: process.env.OPENROUTER_API_KEY,
+  baseURL: process.env.AI_HOST,
+  apiKey: process.env.AI_API_KEY,
 });
 
 export async function* getMindMap(keyword: string) {
   const prompt = `
+# AI 助手角色设定
+
+你是一位专业的知识探索助手和思维导图专家，具备以下能力：
+- 深度跨学科知识整合能力
+- 敏锐的洞察力和创新思维
+- 善于发现意想不到的知识连接
+- 精通各领域的核心概念和前沿发展
+- 擅长将复杂概念转化为清晰的结构化信息
+
+## 语言要求
+- 必须使用中文输出所有内容
+- 专业术语使用准确的中文表达
+- 保持语言简洁清晰，易于理解
+
 # 高级偶然发现提示词
 
 ## 目标
 生成一个全面的偶然发现(Serendipity)思维导图，通过多样化的探索路径挖掘意外连接和突破性洞察。专注于深层结构关系而非表面示例。
 
 ## 输入格式
-**关键词/主题**: ${keyword}
+**关键词/主题**: [关键词]
 
 ## 输出结构
 生成以下格式的JSON结构：
@@ -27,7 +41,6 @@ export async function* getMindMap(keyword: string) {
       "nodeName": "核心概念名称",
       "connection": "与中心主题的关联方式",
       "insight": "关键洞察或突破性认识",
-      "explorationMethods": ["用于发现此连接的探索路径1", "用于发现此连接的探索路径2"],
       "references": [
         "参考资料标题或来源名称",
         "另一个参考资料"
@@ -37,7 +50,6 @@ export async function* getMindMap(keyword: string) {
       "nodeName": "关键词",
       "connection": "关系解释",
       "insight": "这揭示了主题的什么内容",
-      "explorationMethods": ["使用的发现方法1"],
       "references": [
         "支持来源"
       ]
@@ -51,7 +63,19 @@ export async function* getMindMap(keyword: string) {
 - ❌ 错误："先进的量子力学"、"复杂的适应性系统"、"深度神经网络"
 
 **重要说明2：**
-- 请输出json结构，不需要额外的输出。
+- 你必须直接输出纯JSON格式，不要添加任何额外文字、解释或格式化。
+- 不要使用markdown代码块格式。
+- 不要添加\`\`\`json或\`\`\`。
+- 开始就直接输出{，结束就直接输出}。
+- ❌ 错误格式：\`\`\`json { "centerNode": "..." } \`\`\`
+- ❌ 错误格式：这是生成的思维导图：{ "centerNode": "..." }
+- ✅ 正确格式：{ "centerNode": "..." }
+
+**重要说明3：输出格式严格要求**
+- 第一个字符必须是 {
+- 最后一个字符必须是 }
+- 中间不能有任何非JSON内容
+- 不要添加任何解释性文字
 
 ## 12种高级偶然发现探索路径
 
@@ -142,10 +166,10 @@ export async function* getMindMap(keyword: string) {
 12. **时间旅行**：使用历史和未来视角
 13. **打破边界**：忽视传统学科限制
 14. **相信直觉**：跟随关于连接的预感和直觉
-15. **相信直觉**：并非必须提供 references
+15. **自由表达**：并非必须提供 references
 
 ## 预期输出
-- 生成灵活数量的连接（至少8个，但不超过15个）使用选定的路径
+- 生成灵活数量的连接（至少6个，但不超过25个）使用选定的路径
 - 每个连接都应有清晰的洞察和探索方法
 - 专注于突破性洞察和"恍然大悟"时刻
 - 在拥抱创意跃迁的同时保持科学严谨性
@@ -161,14 +185,15 @@ export async function* getMindMap(keyword: string) {
 
   const stream = await openai.chat.completions.create({
     messages: [
-      { role: 'system', content: 'You are a helpful assistant.' },
-      { role: 'user', content: prompt },
+      { role: 'system', content: prompt },
+      { role: 'user', content: keyword },
     ],
-    model: 'deepseek/deepseek-r1-0528',
+    model: process.env.AI_MODEL as string,
     stream: true,
     response_format: {
       type: 'json_object',
     },
+    temperature: 0.8,
   });
 
   for await (const chunk of stream) {

@@ -189,7 +189,7 @@ const ProgressSteps: React.FC<ProgressStepsProps> = ({
   return (
     <div
       className="absolute inset-0 flex items-center justify-center z-50"
-      style={{ width: '450px', left: 'calc(50% - 225px)' }}
+      style={{ width: '450px', left: 'calc(50% - 125px)' }}
     >
       <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full mx-4">
         <div className="text-center mb-6">

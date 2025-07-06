@@ -3,6 +3,8 @@ import { MindMapData, MapNode } from '@serendipity/types';
 import { createMindMapStream } from '../utils/streamingJsonParser';
 import { logKeywordClick } from '../utils/keywordClickLog';
 
+const MAX_KEYWORDS = 1024;
+
 interface AppState {
   keywords: string[];
   keywordsLoading: Record<string, boolean>;
@@ -16,7 +18,6 @@ interface AppState {
 
   // Actions
   addMapNode: (keyword: string, node: MapNode) => void;
-  addKeyword: (keyword: string) => void;
   hasKeyword: (keyword: string) => boolean;
   removeKeyword: (keyword: string) => void;
   setKeywordsLoading: (keyword: string, loading: boolean) => void;
@@ -61,19 +62,53 @@ export const useAppStore = create<AppState>((set, get) => ({
       });
     }
   },
-  addKeyword: (keyword) => {
-    const currentKeywords = get().keywords;
-    if (currentKeywords.includes(keyword)) {
-      return;
-    }
-    const newKeywords = [...currentKeywords, keyword];
-    set({ keywords: newKeywords });
-  },
   hasKeyword: (keyword) => get().keywords.includes(keyword),
   removeKeyword: (keyword) => {
     const currentKeywords = get().keywords;
     const newKeywords = currentKeywords.filter((k) => k !== keyword);
     set({ keywords: newKeywords });
+
+    // Update localStorage
+    try {
+      localStorage.setItem('keywords', JSON.stringify(newKeywords));
+    } catch (error) {
+      console.warn('Failed to update keywords in localStorage:', error);
+    }
+
+    // Clear related localStorage data
+    try {
+      const cacheKey = `mindmap_${keyword.toLowerCase().replace(/\s+/g, '_')}`;
+      localStorage.removeItem(cacheKey);
+    } catch (error) {
+      console.warn('Failed to remove cached mind map data:', error);
+    }
+
+    // Clear related mind map data from store
+    const mindMapDataRecord = get().mindMapDataRecord;
+    if (mindMapDataRecord[keyword]) {
+      const newMindMapDataRecord = { ...mindMapDataRecord };
+      delete newMindMapDataRecord[keyword];
+      set({ mindMapDataRecord: newMindMapDataRecord });
+    }
+
+    // Clear loading states
+    const keywordsLoading = get().keywordsLoading;
+    const keywordsStartLoading = get().keywordsStartLoading;
+    if (keywordsLoading[keyword] || keywordsStartLoading[keyword]) {
+      const newKeywordsLoading = { ...keywordsLoading };
+      const newKeywordsStartLoading = { ...keywordsStartLoading };
+      delete newKeywordsLoading[keyword];
+      delete newKeywordsStartLoading[keyword];
+      set({
+        keywordsLoading: newKeywordsLoading,
+        keywordsStartLoading: newKeywordsStartLoading,
+      });
+    }
+
+    // If the deleted keyword was selected, clear the selection
+    if (get().selectedKeyword === keyword) {
+      set({ selectedKeyword: null });
+    }
   },
   setKeywordsLoading: (keyword: string, loading: boolean) =>
     set({ keywordsLoading: { ...get().keywordsLoading, [keyword]: loading } }),
@@ -93,6 +128,11 @@ export const useAppStore = create<AppState>((set, get) => ({
       const currentKeywords = get().keywords;
       const newKeywords = currentKeywords.filter((k) => k !== keyword);
       newKeywords.unshift(keyword);
+
+      if (newKeywords.length > MAX_KEYWORDS) {
+        const removedKeyword = newKeywords.pop();
+        get().removeKeyword(removedKeyword!);
+      }
 
       set({ keywords: newKeywords });
 

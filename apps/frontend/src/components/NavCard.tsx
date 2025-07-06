@@ -3,6 +3,7 @@ interface NavCardProps {
   isSelect: boolean;
   isLoading?: boolean;
   onClick?: () => void;
+  onDelete?: () => void;
 }
 
 const NavCard = ({
@@ -10,6 +11,7 @@ const NavCard = ({
   isSelect,
   isLoading = false,
   onClick,
+  onDelete,
 }: NavCardProps) => {
   // Define styles for different states
   const selectedStyle = {
@@ -66,18 +68,34 @@ const NavCard = ({
           rounded-lg p-4 border ${baseStyle.border} 
           ${isLoading ? '' : `transition-all duration-300 ${baseStyle.shadow}`}
           ${isLoading ? '' : baseStyle.hover}
-          ${baseStyle.cursor} overflow-hidden
+          ${baseStyle.cursor} overflow-hidden relative group
         `}
         style={loadingInlineStyle}
-        onClick={onClick}
       >
-        <h3
-          className={`font-semibold ${
-            isLoading ? 'text-gray-400 animate-pulse' : baseStyle.title
-          } text-center`}
-        >
-          {keyword}
-        </h3>
+        {/* Main content area - clickable */}
+        <div onClick={onClick} className="flex-1">
+          <h3
+            className={`font-semibold ${
+              isLoading ? 'text-gray-400 animate-pulse' : baseStyle.title
+            } text-center pr-6`}
+          >
+            {keyword}
+          </h3>
+        </div>
+
+        {/* Delete button - appears on hover */}
+        {onDelete && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+            className="absolute top-4 right-3 text-red-500 text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:text-red-600 leading-none"
+            title="删除关键词"
+          >
+            ×
+          </button>
+        )}
       </div>
     </>
   );

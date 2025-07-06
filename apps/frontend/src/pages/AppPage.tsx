@@ -19,6 +19,7 @@ function AppPage() {
     setSelectedKeyword,
     loadMindMapDataStreaming,
     keywords,
+    removeKeyword,
   } = useAppStore();
   const mindMapData = mindMapDataRecord[selectedKeyword ?? ''];
   const navigate = useNavigate();
@@ -102,6 +103,26 @@ function AppPage() {
                   onClick={() =>
                     navigate(`/app?q=${encodeURIComponent(keyword.trim())}`)
                   }
+                  onDelete={() => {
+                    removeKeyword(keyword);
+                    // If the deleted keyword was selected and there are other keywords, select the first one
+                    if (selectedKeyword === keyword && keywords.length > 1) {
+                      const remainingKeywords = keywords.filter(
+                        (k) => k !== keyword
+                      );
+                      if (remainingKeywords.length > 0) {
+                        navigate(
+                          `/app?q=${encodeURIComponent(
+                            remainingKeywords[0].trim()
+                          )}`
+                        );
+                      } else {
+                        navigate('/app');
+                      }
+                    } else if (selectedKeyword === keyword) {
+                      navigate('/app');
+                    }
+                  }}
                 />
               </div>
             ))}

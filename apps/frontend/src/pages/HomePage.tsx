@@ -1,5 +1,6 @@
 import SearchBox from '../components/SearchBox';
 import KeywordMarquee from '../components/KeywordMarquee';
+import Footer from '../components/Footer';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -61,7 +62,7 @@ function HomePage() {
             <span className="text-blue-500">Serendipity</span>
           </h1>
           <p className="text-xl text-gray-600 text-center mt-4">
-            探索未知的知识领域
+            探索无限可能的知识世界
           </p>
         </div>
 
@@ -93,20 +94,7 @@ function HomePage() {
       </main>
 
       {/* Footer */}
-      {/* <footer className="bg-gray-100 border-t border-gray-200">
-        <div className="px-6 py-3 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600 space-y-2 md:space-y-0">
-          <div className="flex space-x-6">
-            <button className="hover:underline">Advertising</button>
-            <button className="hover:underline">Business</button>
-            <button className="hover:underline">How Search works</button>
-          </div>
-          <div className="flex space-x-6">
-            <button className="hover:underline">Privacy</button>
-            <button className="hover:underline">Terms</button>
-            <button className="hover:underline">Settings</button>
-          </div>
-        </div>
-      </footer> */}
+      <Footer />
     </div>
   );
 }

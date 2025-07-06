@@ -207,9 +207,7 @@ function AboutPage() {
             <div className="bg-blue-50 p-8 rounded-lg">
               <p className="text-lg text-gray-700 leading-relaxed">
                 我们希望 Serendipity
-                能够成为知识探索者的得力助手，帮助每个人突破传统学习的局限，
-                发现知识之间隐藏的美妙连接。在这个信息爆炸的时代，我们相信真正的智慧来自于
-                跨领域的思维碰撞和意外的洞察发现。
+                能够成为知识探索者的得力助手，帮助每个人突破传统学习的局限，发现知识之间隐藏的美妙连接。在这个信息爆炸的时代，来自于跨领域的思维碰撞和意外的洞察发现能提供真正的价值。
               </p>
             </div>
           </div>

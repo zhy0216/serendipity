@@ -9,7 +9,7 @@ function Footer({ className = '' }: FooterProps) {
     <footer className={`bg-gray-50 border-t border-gray-200 py-8 ${className}`}>
       <div className="max-w-4xl mx-auto px-6 text-center">
         <p className="text-gray-600 mb-4">
-          © 2025 Serendipity. 探索无限可能的知识世界。
+          © 2025 Serendipity. 探索无限可能的知识世界
         </p>
         <div className="flex justify-center space-x-6 text-sm text-gray-500">
           <Link to="/" className="hover:text-gray-700 transition-colors">

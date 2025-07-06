@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "serve": "nx run-many -t serve -p backend frontend"
     "ci": "nx run-many -t lint test build -p frontend backend types",
     "format": "npx prettier --write .",
     "typecheck": "nx run-many -t typecheck -p frontend backend types"

@@ -1,7 +1,9 @@
 import SearchBox from '../components/SearchBox';
 import KeywordMarquee from '../components/KeywordMarquee';
+import { useNavigate } from 'react-router-dom';
 
 function HomePage() {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
@@ -64,7 +66,7 @@ function HomePage() {
               '文学理论',
             ]}
             onKeywordClick={(keyword) =>
-              console.log('Clicked keyword:', keyword)
+              navigate(`/app?q=${encodeURIComponent(keyword.trim())}`)
             }
           />
         </div>

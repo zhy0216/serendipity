@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { MindMapData, MapNode } from '@serendipity/types';
 import { createMindMapStream } from '../utils/streamingJsonParser';
+import { logKeywordClick } from '../utils/keywordClickLog';
 
 interface AppState {
   keywords: string[];
@@ -79,6 +80,11 @@ export const useAppStore = create<AppState>((set, get) => ({
   setError: (error) => set({ error }),
   setSelectedKeyword: (keyword) => {
     set({ selectedKeyword: keyword });
+
+    // Log keyword click to backend
+    logKeywordClick(keyword).catch((error) => {
+      console.warn('Failed to log keyword click:', error);
+    });
 
     // Only move keyword to front if it's not currently loading
     const isLoading = get().keywordsLoading[keyword];

@@ -2,7 +2,11 @@ import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { streamSSE } from 'hono/streaming';
 import { getMindMap } from './utils';
-import { createSearchResult, findSearchResultsByKeyword } from './repository';
+import {
+  createSearchResult,
+  findSearchResultsByKeyword,
+  createKeywordClickLog,
+} from './repository';
 
 const app = new Hono();
 
@@ -68,6 +72,26 @@ app.get('/api/mindMap', async (c) => {
       });
     }
   });
+});
+
+app.post('/api/keywordClickLog', async (c) => {
+  try {
+    const body = await c.req.json();
+    const { keyword } = body;
+
+    if (!keyword) {
+      return c.json({ error: 'Keyword is required' }, 400);
+    }
+
+    const clickLog = await createKeywordClickLog({
+      keyword,
+    });
+
+    return c.json({ success: true, id: clickLog.id });
+  } catch (error) {
+    console.error('Error logging keyword click:', error);
+    return c.json({ error: 'Failed to log keyword click' }, 500);
+  }
 });
 
 serve(app, (info) => {

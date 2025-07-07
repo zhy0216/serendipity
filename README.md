@@ -1,89 +1,150 @@
-# Serendipity
+# Serendipity - 智能思维导图生成器
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+一个基于 AI 的智能思维导图生成平台，帮助用户探索知识之间的潜在联系，构建结构化的思维图谱。
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+## 🌟 核心功能
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+- **🤖 AI 驱动的思维导图生成**：基于关键词自动生成深度思维导图
+- **📊 实时流式渲染**：边生成边显示，提供流畅的用户体验
+- **💾 智能缓存机制**：本地存储优化，提升访问速度
+- **🔍 智能搜索建议**：基于历史记录的自动完成功能
 
-## Finish your CI setup
+## 🏗️ 技术架构
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/PjLfXni1eS)
+### 前端 (Frontend)
 
-## Generate a library
+- **框架**：React 19 + TypeScript
+- **构建工具**：Vite + Nx
+- **状态管理**：Zustand
+- **路由**：React Router v6
+- **UI 框架**：Tailwind CSS
 
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+### 后端 (Backend)
+
+- **运行时**：Node.js
+- **框架**：Hono (轻量级 Web 框架)
+- **数据库**：PostgreSQL + Kysely ORM
+- **AI 服务**：OpenAI API / OpenRouter
+- **流式处理**：@streamparser/json
+
+### 基础设施
+
+- **容器化**：Docker + Multi-stage builds
+- **代码质量**：Prettier + ESLint + Pre-commit hooks
+- **测试框架**：Jest + Vitest
+- **构建系统**：Nx Monorepo
+
+## 🚀 快速开始
+
+### 环境要求
+
+- Node.js 24+
+- PostgreSQL 14+
+
+### 本地开发
+
+#### 1. 克隆项目
+
+```bash
+git clone <repository-url>
+cd serendipity
 ```
 
-## Run tasks
+#### 2. 安装依赖
 
-To build the library use:
-
-```sh
-npx nx build pkg1
+```bash
+npm install
 ```
 
-To run any task with Nx use:
+#### 3. 环境配置
 
-```sh
-npx nx <target> <project-name>
+```bash
+# 复制环境变量模板
+cp .env.template .env
+
+# 编辑环境变量
+nano .env
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+**必需的环境变量：**
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+# AI 服务配置
+export AI_API_KEY="your-api-key"           # OpenAI/OpenRouter API 密钥
+export AI_MODEL="deepseek/deepseek-r1-0528" # AI 模型名称
+export AI_HOST="https://openrouter.ai/api/v1" # AI API 端点
 
-## Versioning and releasing
+# 数据库配置
+export DATABASE_URL="postgresql://username:password@localhost:5432/dbname"
 
-To version and release the library use
-
-```
-npx nx release
-```
-
-Pass `--dry-run` to see what would happen without actually releasing the library.
-
-[Learn more about Nx release &raquo;](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Keep TypeScript project references up to date
-
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
-
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
-
-```sh
-npx nx sync
+# 开发环境配置
+export NODE_ENV=development
+export PORT=3000                    # 后端端口
+export FRONTEND_PORT=4200           # 前端端口
+export NX_NO_CLOUD=true            # 禁用 Nx Cloud
 ```
 
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
+#### 4. 数据库初始化
 
-```sh
-npx nx sync:check
+```bash
+# 创建数据库
+createdb serendipity
+
+# 运行数据库迁移
+npm run migrate:db
+
+# 生成类型定义 (可选)
+npm run generateTypes
 ```
 
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
+#### 5. 启动开发服务器
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+# 同时启动前后端服务
+npm run serve
 
-## Install Nx Console
+# 或者分别启动
+nx serve backend   # 后端服务：http://localhost:3000
+nx serve frontend  # 前端服务：http://localhost:4200
+```
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+### 开发工作流
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+#### 代码格式化
 
-## Useful links
+项目配置了自动代码格式化：
 
-Learn more:
+```bash
+# 手动格式化所有文件
+npm run format
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+# Git 提交时自动格式化 (pre-commit hook)
+git commit -m "your message"  # 自动触发格式化
+```
 
-And join the Nx community:
+#### 类型检查
 
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+# 运行 TypeScript 类型检查
+npm run typecheck
+```
+
+#### 测试
+
+```bash
+# 运行所有测试
+npm test
+
+# 运行 CI 检查 (测试 + 类型检查)
+npm run ci
+```
+
+#### 数据库操作
+
+```bash
+# 生成数据库类型定义
+npm run generateTypes
+
+# 运行数据库迁移
+npm run migrate:db
+```

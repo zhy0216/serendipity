@@ -264,36 +264,6 @@ function SearchBox({
           ))}
         </div>
       )}
-
-      {/* Google-style buttons */}
-      {/* <div className="flex justify-center mt-6 space-x-4">
-        <button
-          onClick={handleSubmit}
-          className="px-6 py-2 text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded hover:shadow-sm hover:border-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          Search Ideas
-        </button>
-        <button
-          onClick={() => {
-            // Generate a random search term for "I'm Feeling Lucky"
-            const randomTopics = [
-              'artificial intelligence', 'climate change', 'blockchain', 'quantum computing',
-              'renewable energy', 'space exploration', 'biotechnology', 'machine learning',
-              'sustainable design', 'virtual reality', 'neuroscience', 'robotics'
-            ];
-            const randomTopic = randomTopics[Math.floor(Math.random() * randomTopics.length)];
-            setQuery(randomTopic);
-            if (onSearch) {
-              onSearch(randomTopic);
-            } else {
-              navigate(`/app?q=${encodeURIComponent(randomTopic)}`);
-            }
-          }}
-          className="px-6 py-2 text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded hover:shadow-sm hover:border-gray-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          I'm Feeling Lucky
-        </button>
-      </div> */}
     </div>
   );
 }
